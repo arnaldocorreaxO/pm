@@ -12,7 +12,8 @@ $(function() {
         language: 'es',
         dropdownParent: $('#modal-movimiento')
     });
-    
+
     filtrar_area_solicitante();
+    
     
 });
