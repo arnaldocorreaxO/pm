@@ -7,7 +7,7 @@ function init() {
     // Para el modal ver el comentario en del javascript
     $('.select2').select2({
         theme: "bootstrap4",
-        language: 'es'
+        language: 'es',
     });
 
     
