@@ -3,14 +3,15 @@ var input_daterange;
 var columns = [];
 
 function init() {
-    // Este es para los select2 de la lista no afecta al modal 
-    // Para el modal ver el comentario en del javascript
-    $('.select2').select2({
-        theme: "bootstrap4",
-        language: 'es',
+    $(document).ready(function () {
+        $('.select2').select2({
+            theme: "bootstrap4",
+            language: 'es',
+
+        });
+        filtrar_area_solicitante();
     });
 
-    
     tblData = $('#data').DataTable({
         responsive: true,
         autoWidth: false,
@@ -243,11 +244,10 @@ function getData(all) {
             $('[data-toggle="tooltip"]').tooltip();
         }
     });
-}
+};
 
 // INIT LOAD
 $(function () {  
-
     // var link_add = document.querySelector('a[href="/electoral/elector/add/"]');
     // var link_upd = document.querySelector('a[href=""]');
     // link_add.style.display = 'none';
@@ -302,31 +302,21 @@ $(function () {
         $('.btnFilter').click();
       });
 
-    //  select_ciudad.val("").change();
-    //  select_seccional.val("").change();
-    //  select_barrio.val("").change();
-    //  select_manzana.val("").change();
-    //  select_mesa.val("").change();
+   
 
 });
 
-
-
 // VENTANAS MODAL 
 $(function () {
-
-
-
-    /* Functions */
-  
+    /* Functions */  
     var loadForm = function () {
         var btn = $(this);
         $.ajax({
             url: btn.attr("data-url"),
             type: 'get',
             dataType: 'json',
-            beforeSend: function () {
-                $("#modal-movimiento").modal("show");
+            beforeSend: function () {         
+                    $("#modal-movimiento").modal("show");
             },
             success: function (data) {
                 // console.log('SUCEEEEEEEEEEEEEEEEEEEEEEEEESS')   

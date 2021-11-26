@@ -38,7 +38,24 @@ class MovimientoListView(PermissionMixin, FormView):
 		action = request.POST['action']
 		# print(request.POST)
 		try:
-			if action == 'search':
+			if action == 'search_area_solicitante_id':
+				data = [{'id': '', 'text': '------------'}]
+				print(request.POST)
+				id = request.POST.getlist('id') if 'id' in request.POST else '0'		
+				id= ",".join(id) if id!=[''] else None
+
+				_where = "1 = 1"
+				if id:
+					_where += f" AND pedido_dependencia.dependencia_padre_id IN ({id})"
+				
+				qs = Dependencia.objects.filter(activo__exact=True)\
+										.extra(where=[_where])\
+									    .order_by('denominacion')	
+				# print(qs.query)
+				for i in qs:
+					# data.append({'id': i.id, 'text': i.denominacion, 'data': i.barrio.toJSON()})
+					data.append({'id': i.id, 'text': i.denominacion})	
+			elif action == 'search':
 				data = []
 				term = request.POST['term']
 				start_date = request.POST['start_date']
@@ -184,24 +201,7 @@ class MovimientoCreateView(PermissionMixin, CreateView):
 			if action == 'add':
 				data = self.get_form().save()
 			elif action == 'validate_data':
-				return self.validate_data()
-			elif action == 'search_area_solicitante_id':
-				data = [{'id': '', 'text': '------------'}]
-				print(request.POST)
-				id = request.POST.getlist('id') if 'id' in request.POST else '0'		
-				id= ",".join(id) if id!=[''] else None
-
-				_where = "1 = 1"
-				if id:
-					_where += f" AND pedido_dependencia.dependencia_padre_id IN ({id})"
-				
-				qs = Dependencia.objects.filter(activo__exact=True)\
-										.extra(where=[_where])\
-									    .order_by('denominacion')	
-				# print(qs.query)
-				for i in qs:
-					# data.append({'id': i.id, 'text': i.denominacion, 'data': i.barrio.toJSON()})
-					data.append({'id': i.id, 'text': i.denominacion})				
+				return self.validate_data()						
 			else:
 				data['error'] = 'No ha seleccionado ninguna opción'
 		except Exception as e:
