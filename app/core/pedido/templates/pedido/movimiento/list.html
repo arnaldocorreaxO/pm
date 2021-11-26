@@ -1,0 +1,115 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.css' %}" />
+    <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/spanish.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.js' %}"></script>
+{% endblock %}
+
+
+{%block javascript_list%}
+<script src="{% static 'pedido/movimiento/js/list.js' %}"></script>
+<script src="{% static 'pedido/movimiento/js/select2_solicitante_area_solicitante.js' %}"></script>
+{%endblock%}
+
+{% block columns %}
+    <th style="width: 5%;">N° Ped.</th>
+    <th style="width: 5%;">Fecha</th>
+    <th style="width: 5%;">Solicitante</th>
+    <th style="width: 5%;">Area</th>
+    <th style="width: 35%;">Descripcion</th>
+    <th style="width: 35%;">Destino</th>
+    <th style="width: 10%;">Estado</th>    
+    <th style="width: 10%;" class="text-center">Opciones</th>
+{% endblock %}
+
+{% block content_list_before %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label>Por Año:</label>
+                <div class="input-group mb-3">
+                    {{ form.anho }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label>Por Solicitante:</label>
+                <div class="input-group mb-3">
+                    {{ form.solicitante }}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label>Por Area Solicitante:</label>
+                <div class="input-group mb-3">
+                    {{ form.area_solicitante }}
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label>Rangos de fechas:</label>
+                <div class="input-group mb-3">
+                    {{ form.date_range }}
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary btnSearch" type="button">
+                            <i class="fas fa-calendar-check"></i> Filtrar por fechas 
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label>Buscar por Numero ó Descripción Pedido </label>
+                <div class="input-group mb-3">
+                    {{ form.term }}
+                    <div class="input-group-append">
+                        <button class="btn btn-warning btnFilter" type="button">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>     
+                            <button class="btn btn-success btnSearchAll" type="button">
+                                <i class="fab fa-searchengin"></i> Ver todos
+                            </button>          
+                    </div>
+                </div>
+            </div>
+        </div>          
+    </div>
+    <hr>
+{% endblock %}
+
+{% block box_header_buttons %}
+    {% if create_url %}
+        <!-- <a href="{{ create_url }}" class="btn btn-primary btn-flat">
+            <i class="fas fa-plus"></i> Nuevo Registro
+        </a> -->
+        <button type="button" class="btn btn-primary btn-flat js-create" data-url="/pedido/movimiento/add/">
+            <i class="fas fa-plus"></i> Nuevo Registro
+        </button>
+    {% endif %}
+    <!--Block box footer add buttons-->
+    {% block box_header_add_button %}{% endblock %}
+        <a href="{{ list_url }}" class="btn btn-success btn-flat">
+            <i class="fas fa-sync-alt"></i> Actualizar
+        </a>
+{% endblock %}
+
+{% block content_modals %}
+<!-- THE MODAL WE WILL BE USING -->
+<div class="modal fade" id="modal-movimiento">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+        </div>
+    </div>
+<div>
+{% endblock %}
