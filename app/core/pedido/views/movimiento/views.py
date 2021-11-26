@@ -106,7 +106,7 @@ class MovimientoListView(PermissionMixin, FormView):
 						_where = " nro_pedido = %s"
 					else:
 						_search = '%' + _search.replace(' ', '%') + '%'
-						_where = " upper(descripcion||' '|| desc_destino) LIKE upper(%s)"			
+						_where = " upper(descripcion||' '|| destino) LIKE upper(%s)"			
 
 				if anho:
 					_where += f" AND pedido_movimiento.anho IN ({anho})"

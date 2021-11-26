@@ -166,7 +166,7 @@ function getData(all) {
             {data: "descripcion"},
             {data: "destino"},
             {data: "situacion"},
-            {data: "id"},
+            {data: "id"},   
         ],
         columnDefs: [
           
