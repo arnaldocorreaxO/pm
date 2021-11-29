@@ -5,7 +5,7 @@ from django.db.models.aggregates import Count
 from django.db.models.fields import FloatField
 from django.db.models.query_utils import Q
 
-# from core.bascula.models import Categoria, Cliente, Movimiento, Producto
+from core.pedido.models import Movimiento
 from core.base.models import Empresa
 from core.security.models import Dashboard
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -33,31 +33,50 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 return 'vtcpanel.html'
         return 'hztpanel.html'
 
-    # def get(self, request, *args, **kwargs):
-    #     request.user.set_group_session()
-    #     return super().get(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        request.user.set_group_session()
+        return super().get(request, *args, **kwargs)
 
-    # def post(self, request, *args, **kwargs):
-    #     data = {}
-    #     try:
-    #         action = request.POST['action']
-    #         if action == 'get_graph_1':
-    #             info = []
-    #             hoy = datetime.datetime.now()
-    #             for i in Movimiento.objects.values('producto__denominacion') \
-    #                     .filter(fecha=hoy, peso_neto__gt=0)\
-    #                     .exclude(anulado=True)\
-    #                     .annotate(tot_recepcion=Sum('peso_neto', output_field=FloatField())) \
-    #                     .order_by('-tot_recepcion'):
-    #                 info.append([i['producto__denominacion'],
-    #                              i['tot_recepcion']/1000])
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'get_graph_1':
+                info = []
+                hoy = datetime.datetime.now()
+                qs = Movimiento.objects.values('situacion') \
+                        .filter(fecha__year =2020)\
+                        .exclude(activo=False)\
+                        .annotate(total=Count('id')) \
+                        .order_by('-total')
+                print(qs.query)
+                c=0
+                for i in qs:
+                    mov = Movimiento()
+                    mov.ESTADO_PEDIDO
+                    print(mov.ESTADO_PEDIDO)
+                    estado_pedido = dict(mov.ESTADO_PEDIDO)
+                    print(estado_pedido)
+                    situacion = i['situacion']
+                    print(situacion)
+                    if situacion is None or situacion=='':
+                        c+=i['total']
+                    else:
+                        situacion = estado_pedido[situacion]
+                        info.append([situacion,
+                                    i['total']])
+                    
+                info.append(['PENDIENTE',
+                             c])
 
-    #             data = {
-    #                 'name': 'Stock de Productos',
-    #                 'type': 'pie',
-    #                 'colorByPoint': True,
-    #                 'data': info,
-    #             }
+                data = {
+                    'name': 'Situacion Pedido',
+                    'type': 'pie',
+                    'colorByPoint': True,
+                    'data': info,
+                }
+
+                print(data)
     #         elif action == 'get_graph_2':
     #             data = []
     #             categorias=[]
@@ -279,26 +298,26 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     #             }
 
     #             # print(data)
-    #         else:
-    #             data['error'] = 'Ha ocurrido un error'
-    #     except Exception as e:
-    #         data['error'] = str(e)
-    #     return JsonResponse(data, safe=False)
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['title'] = 'Panel de administración'
-    #     context['fecha_actual'] = datetime.datetime.today().strftime("%d/%m/%Y")
-    #     context['fecha_hora_actual'] = datetime.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-    #     context['mes_actual'] = datetime.datetime.today().strftime("%B").capitalize()
-    #     context['anho_actual'] = datetime.datetime.today().strftime("%Y")
-    #     context['empresa'] = Empresa.objects.first()
-    #     context['clientes'] = Cliente.objects.all().count()
-    #     context['categorias'] = Categoria.objects.filter().count()
-    #     context['productos'] = Producto.objects.all().count()
-    #     context['movimientos'] = Movimiento.objects.filter().order_by('-id')[0:10]
-    #     context['usuario'] = User.objects.filter(id=self.request.user.id).first()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Panel de administración'
+        context['fecha_actual'] = datetime.datetime.today().strftime("%d/%m/%Y")
+        context['fecha_hora_actual'] = datetime.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+        context['mes_actual'] = datetime.datetime.today().strftime("%B").capitalize()
+        context['anho_actual'] = datetime.datetime.today().strftime("%Y")
+        context['empresa'] = Empresa.objects.first()
+        # context['clientes'] = Cliente.objects.all().count()
+        # context['categorias'] = Categoria.objects.filter().count()
+        # context['productos'] = Producto.objects.all().count()
+        context['movimientos'] = Movimiento.objects.filter().order_by('-id')[0:10]
+        context['usuario'] = User.objects.filter(id=self.request.user.id).first()
+        return context
 
 
 @requires_csrf_token

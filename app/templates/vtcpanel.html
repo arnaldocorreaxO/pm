@@ -169,7 +169,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header border-transparent">
-                            <h3 class="card-title"><i class="fas fa-truck"></i> Los últimos 10 Movimientos</h3>
+                            <h3 class="card-title"><i class="fas fa-list"></i> Los últimos 10 Pedidos</h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -177,20 +177,20 @@
                                     <thead>
                                     <tr>
                                         <th class="text-center">Fecha</th>
-                                        <th>Vehiculo</th>
-                                        <th>Chofer</th>
-                                        <th>Producto</th>
-                                        <th class="text-right">Neto</th>
+                                        <th>Nro. Pedido</th>
+                                        <th>Descripcion</th>
+                                        <th>Destino</th>
+                                        <!-- <th class="text-right">Neto</th> -->
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for mov in movimientos %}
                                         <tr>              
-                                            <td class="text-center">{{ mov.fec_insercion|date:"d/m/Y H:i:s" }}</td>
-                                            <td>{{ mov.vehiculo.get_full_name }}</td>
-                                            <td>{{ mov.chofer.get_full_name }}</td>
-                                            <td>{{ mov.producto }}</td> 
-                                            <td class="text-right">{{ mov.peso_neto }}</td>
+                                            <td class="text-center">{{ mov.fecha|date:"d/m/Y" }}</td>
+                                            <td>{{ mov.nro_pedido }}</td>
+                                            <td>{{ mov.descripcion }}</td>
+                                            <td>{{ mov.destino }}</td> 
+                                            <!-- <td class="text-right">{{ mov.peso_neto }}</td> -->
                                             
                                         </tr>
                                     {% endfor %}
@@ -203,7 +203,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-industry"></i> Movimientos del Día {{ current_date }}</h3>
+                            <h3 class="card-title"><i class="fas fa-industry"></i> Situación Pedidos de Materiales {{ current_date }}</h3>
                         </div>
                         <div class="card-body p-0">
                             <div id="graph_1" style="height: 64vh;"></div>
@@ -275,7 +275,7 @@
                     args.push("{{mes_actual}}");
                     args.push("{{anho_actual}}");
                     
-                    // get_graph_1(args);
+                    get_graph_1(args);
                     // get_graph_2(args);
                     // get_graph_3(args);
                     // get_graph_4(args);

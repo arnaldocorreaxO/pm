@@ -144,9 +144,12 @@ class SearchForm(forms.Form):
     #     'autocomplete': 'off'
     # }))
 
-    anho = ModelChoiceFieldAnho(queryset=Movimiento.objects.filter(activo__exact=True).order_by('-anho').distinct('anho'),to_field_name='anho', empty_label="(Todos)")
-    solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(dependencia_padre__isnull=True,activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
-    area_solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(dependencia_padre__isnull=False,activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
+    anho = ModelChoiceFieldAnho(queryset=Movimiento.objects.filter(activo__exact=True).order_by(
+        '-anho').distinct('anho'), to_field_name='anho', empty_label="(Todos)")
+    solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
+        dependencia_padre__isnull=True, activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
+    area_solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
+        dependencia_padre__isnull=False, activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
     # producto = forms.ModelChoiceField(queryset=Producto.objects.filter(activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
     # vehiculo = forms.ModelChoiceField(queryset=Vehiculo.objects.filter(activo__exact=True).order_by('matricula'), empty_label="(Todos)")
     # chofer = forms.ModelChoiceField(queryset=Chofer.objects.filter(activo__exact=True).order_by('nombre','apellido'), empty_label="(Todos)")
