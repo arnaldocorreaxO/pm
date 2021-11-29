@@ -9,6 +9,7 @@
     <script src="{% static 'lib/formvalidation-dist-v1.7.0/dist/js/FormValidation.min.js' %}"></script>
     <script src="{% static 'lib/formvalidation-dist-v1.7.0/dist/js/plugins/Bootstrap.min.js' %}"></script>
     <script src="{% static 'lib/formvalidation-dist-v1.7.0/dist/js/locales/es_ES.min.js' %}"></script>
+
     {% block head_form %}
         <script src="{% static 'pedido/movimiento/js/form.js' %}"></script>
         <script src="{% static 'pedido/movimiento/js/modal.js' %}"></script>
@@ -17,6 +18,7 @@
 {% endblock %}
 
 {% block content %}
+
     <form class="{{class_form}}" method="post" action="{{action_url}}" enctype="multipart/form-data" id="frmForm"
           data-url="{{ list_url }}">
         <div class="card {{ dshboard.card }}">
@@ -33,6 +35,8 @@
             <div class="card-body" style="display: block;">
                 <div class="container-fluid">
                     <input type="hidden" name="action" id="action" value="{{ action }}">
+                    <input type="hidden" name="sucursal_id" id="action" value="{{ sucursal }}">
+                    <input type="hidden" name="fecha_actual" id="action" value="{{ fecha_actual }}">
                     {% csrf_token %}
                     {# Forms Visible #}
                     <!-- {% for field in form.visible_fields %}

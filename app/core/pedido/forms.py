@@ -80,9 +80,10 @@ class MovimientoForm(ModelForm):
         fields = '__all__'
         exclude = readonly_fields
         widgets = {
-            'sucursal': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
-            'nro_pedido': forms.TextInput(attrs={'placeholder': 'Ingrese Nro SOLPED'}),
-            'nro_expediente': forms.TextInput(attrs={'placeholder': 'Ingrese Nro Expediente'}),
+            'sucursal': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;','disabled': True,}),
+            'nro_pedido': forms.TextInput(attrs={'placeholder': 'Ingrese Nro SOLPED'}),  
+            'fecha' : forms.DateInput(format='%d/%m/%Y',attrs={'class': 'form-control','autocomplete': 'off'}),
+            'nro_expediente': forms.TextInput(attrs={'placeholder': 'Ingrese Nro Expediente','required': True}),
             'anho': forms.TextInput(attrs={'readonly':'readonly'}),
             'solicitante': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'area_solicitante': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
@@ -90,20 +91,10 @@ class MovimientoForm(ModelForm):
             'destino': forms.Textarea(attrs={'rows':2,'placeholder': 'Ingrese el Destino del Pedido'}),
             'ref_doc_asociado': forms.Textarea(attrs={'rows':4,'placeholder': 'Ingrese Ref. Documentos Asociados al Pedido, Contratos, Ordenes de Compra, Remisiones, etc'}),
             'ref_ped_anterior': forms.TextInput(attrs={'placeholder': 'Ingrese Referencia de Pedidos Anteriores'}),
-            
-            # 'barrio': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;' }),
-            # 'manzana': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;' }),
-            # 'tipo_voto': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;' }),
-            # 'local_votacion': forms.Select(attrs={'class': 'form-control select2',
-            #                                       'style': 'width: 100%;',
-            #                                       'disabled':'disabled',
-            #                                       'selected' : 'selected'}),
-            # 'seccional': forms.Select(attrs={'class': 'form-control select2',
-            #                                 'style': 'width: 100%;',
-            #                                 'disabled':'disabled',
-            #                                 'selected' : 'selected' }),
-            
         }
+        # label ={
+        #     "sucursal":"Frente de Servicios",
+        # }
 
     def clean(self):
         import datetime

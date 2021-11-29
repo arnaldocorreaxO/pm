@@ -1,9 +1,8 @@
 import math
-
+import datetime
 from django.db import connection
 from core.pedido.models import Dependencia
 from core.reports.jasperbase import JasperReportBase
-from datetime import date, datetime
 from core.reports.forms import ReportForm
 import json
 
@@ -32,15 +31,31 @@ class MovimientoListView(PermissionMixin, FormView):
 	@method_decorator(csrf_exempt)
 	def dispatch(self, request, *args, **kwargs):
 		return super().dispatch(request, *args, **kwargs)
+
+	def validate_data(self):
+		data = {'valid': True}
+		try:			
+			type = self.request.POST['type']
+			obj = self.request.POST['obj'].strip()            
+			if type == 'nro_pedido':                
+				if Movimiento.objects.filter(nro_pedido__exact=obj):
+					data['valid'] = False
+			if type == 'no_denominacion':
+				if Movimiento.objects.filter(denominacion__iexact=obj):
+					data['valid'] = False
+		except:
+			pass
+		return JsonResponse(data)
 	
 	def post(self, request, *args, **kwargs):
 		data = {}
 		action = request.POST['action']
 		# print(request.POST)
 		try:
-			if action == 'search_area_solicitante_id':
-				data = [{'id': '', 'text': '------------'}]
-				print(request.POST)
+			if action == 'validate_data':
+				return self.validate_data()
+			elif action == 'search_area_solicitante_id':
+				data = [{'id': '', 'text': '------------'}]	
 				id = request.POST.getlist('id') if 'id' in request.POST else '0'		
 				id= ",".join(id) if id!=[''] else None
 
@@ -127,7 +142,7 @@ class MovimientoListView(PermissionMixin, FormView):
 
 				#Pedidos del Año
 				if len(start_date) and len(end_date):
-					start_date = datetime.strptime(start_date, '%Y-%m-%d')
+					start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
 					qs = qs.filter(fecha__range=(start_date,end_date))
 								   
 				total = qs.count()
@@ -225,6 +240,8 @@ class MovimientoCreateView(PermissionMixin, CreateView):
 				context['list_url'] = self.success_url
 				context['title'] = 'Nuevo registro de un Pedido'
 				context['action'] = 'add'
+				context['sucursal'] = self.request.user.sucursal.id
+				context['fecha_actual'] = datetime.datetime.today().strftime("%d/%m/%Y")
 				data['html_form'] = render_to_string(self.template_name, context, request=request)
 			else:
 				data['error'] = 'No tiene permisos para editar'
@@ -241,6 +258,8 @@ class MovimientoCreateView(PermissionMixin, CreateView):
 		context['list_url'] = self.success_url
 		context['title'] = 'Nuevo registro de un Pedido'
 		context['action'] = 'add'
+		context['sucursal'] = self.request.user.sucursal.id
+		context['fecha_actual'] = datetime.datetime.today().strftime("%d/%m/%Y")
 		return context
 
 class MovimientoUpdateView(PermissionMixin, UpdateView):

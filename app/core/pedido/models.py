@@ -62,7 +62,7 @@ class Movimiento(ModeloBase):
 	solicitante = models.ForeignKey(Dependencia,on_delete=models.PROTECT,related_name='solicitante') #Gerencia, Direccion o Departamento Solicitante 
 	area_solicitante = models.ForeignKey(Dependencia,on_delete=models.PROTECT,related_name='area_solicitante',null=True) #El Area Solicitante
 	descripcion = models.CharField(max_length=250)	
-	destino = models.CharField(max_length=250,null=True,blank=True)	
+	destino = models.CharField(max_length=250)	
 	# destino = models.ForeignKey(Destino,on_delete=models.PROTECT)
 	situacion = models.CharField(max_length=2,choices=ESTADO_PEDIDO,null=True,blank=True)
 	ref_doc_asociado = models.TextField(null=True,blank=True) #Remisiones, Contrato, Ordenes de Compra

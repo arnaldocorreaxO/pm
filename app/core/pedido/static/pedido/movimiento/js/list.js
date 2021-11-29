@@ -38,12 +38,6 @@ function getData(all) {
         select_anho.val("").change();
         select_solicitante.val("").change();
         select_area_solicitante.val("").change();
-        // select_seccional.val("").change();
-        // select_barrio.val("").change();
-        // select_manzana.val("").change();
-        // select_mesa.val("").change();
-        // select_pasoxpc.val("").change();
-        // select_pasoxmv.val("").change();
     }
 
     var parameters = {
@@ -53,13 +47,7 @@ function getData(all) {
         'term': input_term.val(),
         'anho': select_anho.val().join(", "),
         'solicitante': select_solicitante.val().join(", "),
-        'area_solicitante': select_area_solicitante.val().join(", "),
-        // 'barrio': select_barrio.val(),
-        // 'manzana': select_manzana.val(),
-        // 'mesa': select_mesa.val(),
-        // 'pasoxpc': select_pasoxpc.val(),
-        // 'pasoxmv': select_pasoxmv.val(),
-        
+        'area_solicitante': select_area_solicitante.val().join(", "),        
     };
 
     if (all!='bday') {
@@ -259,13 +247,6 @@ $(function () {
     select_anho = $('select[name="anho"]');
     select_solicitante = $('select[name="solicitante"]');
     select_area_solicitante = $('select[name="area_solicitante"]');
-    // select_seccional = $('select[name="seccional"]');
-    // select_barrio = $('select[name="barrio"]');
-    // select_manzana = $('select[name="manzana"]');
-    // select_mesa = $('select[name="mesa"]');
-    // select_pasoxpc = $('select[name="pasoxpc"]');
-    // select_pasoxmv = $('select[name="pasoxmv"]');
-
 
     input_daterange
         .daterangepicker({
@@ -338,7 +319,8 @@ $(function () {
         // select_local_votacion.prop("disabled", false);
 
 
-        var form = $(this);        
+        var form = $(this);   
+        $('#modal-movimiento select[name="sucursal"]').prop('disabled', false);     
             $.ajax({
                 url: form.attr("action"),
                 data: form.serialize(),
@@ -351,7 +333,8 @@ $(function () {
                         $("#modal-movimiento").modal("hide");
                         // select_seccional.prop("disabled", true);
                         // select_local_votacion.prop("disabled", true); 
-                        message_success('Guardado Exitosamente!')                                               
+                        message_success('Guardado Exitosamente!');
+                        $('#modal-movimiento select[name="sucursal"]').prop('disabled', true);                                                   
                         return false;
                     }
                     message_error(request.error);
