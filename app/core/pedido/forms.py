@@ -87,7 +87,7 @@ class MovimientoForm(ModelForm):
             'area_solicitante': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'descripcion': forms.Textarea(attrs={'rows':2,'placeholder': 'Ingrese la Descripcion del Pedido'}),
             'destino': forms.Textarea(attrs={'rows':2,'placeholder': 'Ingrese el Destino del Pedido'}),
-            'ref_doc_asociado': forms.Textarea(attrs={'rows':4}),
+            'ref_doc_asociado': forms.Textarea(attrs={'rows':4,'placeholder': 'Ingrese Ref. Documentos Asociados del Pedido, Contratos, Ordenes de Compra, Remisiones, etc'}),
             'ref_ped_anterior': forms.TextInput(attrs={'placeholder': 'Ingrese Referencia de Pedidos Anteriores'}),
             
             # 'barrio': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;' }),
