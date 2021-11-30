@@ -1,3 +1,4 @@
+
 function validar_formulario() {
     // document.addEventListener('DOMContentLoaded', function (e) {
         const form = document.getElementById('frmModalMovimiento');
