@@ -114,13 +114,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="{#% url 'cliente_list' %}" class="small-box-footer">
+                    <a href="{% url 'sucursal_list' %}" class="small-box-footer">
                         <div class="info-box">
-                            <span class="info-box-icon bg-info"><i class="fas fa-user-friends"></i></span>
+                            <span class="info-box-icon bg-info"><i class="far fa-building"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Clientes</span>
+                                <span class="info-box-text">Sucursales</span>
                                 <span class="info-box-number">
-                                    {{ clientes }}
+                                    {{ sucursales }}
                                 </span>
                             </div>
                         </div>
@@ -128,37 +128,39 @@
                     </a>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-success"><i class="fas fa-truck"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Proveedores</span>
-                            <span class="info-box-number">
-                                {{ provider }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 col-12">
-                    <a href="{#% url 'categoria_list' %}" class="small-box-footer">
+                    <a href="{% url 'dependencia_list' %}" class="small-box-footer">
                         <div class="info-box">
-                            <span class="info-box-icon bg-warning"><i class="fas fa-truck-loading"></i></span>
+                            <span class="info-box-icon bg-success"><i class="fas fa-building"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Categorías</span>
+                                <span class="info-box-text">Dependencias</span>
                                 <span class="info-box-number">
-                                    {{ categorias }}
+                                    {{ dependencias }}
                                 </span>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="{#% url 'producto_list' %}" class="small-box-footer">
+                    <a href="{% url 'movimiento_list' %}" class="small-box-footer">
                         <div class="info-box">
-                            <span class="info-box-icon bg-danger"><i class="fas fa-box"></i></span>
+                            <span class="info-box-icon bg-warning"><i class="fas fa-clipboard-list"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Productos</span>
+                                <span class="info-box-text">Pedidos</span>
                                 <span class="info-box-number">
-                                    {{ productos }}
+                                    {{ pedidos }}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="/admin/" class="small-box-footer">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger"><i class="fas fa-user-shield"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Administración</span>
+                                <span class="info-box-number">
+                                    <!-- {#{ productos }} -->
                                 </span>
                             </div>
                         </div>
