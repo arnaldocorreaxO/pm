@@ -25,7 +25,7 @@ function get_graph_1(args) {
             }
         },
         tooltip: {
-            pointFormat: 'Stock: <b>{point.y:.2f} TON</b>'
+            pointFormat: 'Total: <b>{point.y:.0f} UN.</b>'
         },
         plotOptions: {
             pie: {
@@ -39,7 +39,6 @@ function get_graph_1(args) {
             }
         },
     });
-
 
     $.ajax({
         url: window.location.pathname,
