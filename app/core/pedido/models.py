@@ -64,7 +64,7 @@ class Movimiento(ModeloBase):
 	descripcion = models.CharField(max_length=250)	
 	destino = models.CharField(max_length=250)	
 	# destino = models.ForeignKey(Destino,on_delete=models.PROTECT)
-	situacion = models.CharField(max_length=4,choices=SITUACION_PEDIDO,null=True,blank=True,default='PEND')
+	situacion = models.CharField(max_length=4,choices=SITUACION_PEDIDO,default='PEND')
 	ref_doc_asociado = models.TextField(null=True,blank=True) #Remisiones, Contrato, Ordenes de Compra
 	ref_ped_anterior = models.CharField(max_length=100,null=True,blank=True) #Referencia Pedido Anterior
 	nro_expediente = models.CharField(max_length=10,null=True,blank=True)
