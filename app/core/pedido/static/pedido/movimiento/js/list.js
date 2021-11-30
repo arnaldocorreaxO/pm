@@ -9,6 +9,7 @@ function init() {
 
         });
         filtrar_area_solicitante();
+
     });
 
     tblData = $('#data').DataTable({
@@ -50,11 +51,6 @@ function getData(all) {
         'solicitante': (select_solicitante.val().includes('')?'*':select_solicitante.val().join(", ")),
         'area_solicitante': (select_area_solicitante.val().includes('')?'*':select_area_solicitante.val().join(", "))   
     };
-
-    console.log(select_anho.val().includes(''));
-    console.log(select_situacion.val().includes(''));
-    console.log(select_solicitante.val().includes(''));
-    console.log(select_area_solicitante.val().includes(''));
 
     if (all!='bday') {
         parameters['start_date'] = '';
@@ -274,12 +270,12 @@ $(function () {
             type: 'get',
             dataType: 'json',
             beforeSend: function () {         
-                    $("#modal-movimiento").modal("show");
+                    $("#frmModalMovimiento").modal("show");
             },
             success: function (data) {
                 // console.log('SUCEEEEEEEEEEEEEEEEEEEEEEEEESS')   
-                if (!data.hasOwnProperty('error')) {
-                    $("#modal-movimiento .modal-content").html(data.html_form);
+                if (!data.hasOwnProperty('error')) {                    
+                    $("#frmModalMovimiento .modal-content").html(data.html_form);
                     return false;
                 }
                 console.log(data);
@@ -297,7 +293,7 @@ $(function () {
 
 
         var form = $(this);   
-        $('#modal-movimiento select[name="sucursal"]').prop('disabled', false);     
+        $('#frmModalMovimiento select[name="sucursal"]').prop('disabled', false);     
             $.ajax({
                 url: form.attr("action"),
                 data: form.serialize(),
@@ -307,11 +303,11 @@ $(function () {
                     // console.log(request);
                     if (!request.hasOwnProperty('error')) {   
                         tblData.draw('page');
-                        $("#modal-movimiento").modal("hide");
+                        $("#frmModalMovimiento").modal("hide");
                         // select_seccional.prop("disabled", true);
                         // select_local_votacion.prop("disabled", true); 
                         message_success('Guardado Exitosamente!');
-                        $('#modal-movimiento select[name="sucursal"]').prop('disabled', true);                                                   
+                        $('#frmModalMovimiento select[name="sucursal"]').prop('disabled', true);                                                   
                         return false;
                     }
                     message_error(request.error);
@@ -322,15 +318,23 @@ $(function () {
             });
         return false;
     };
-   
-    /* Binding */
-  
+
+    // $('#frmModalMovimiento').on('submit',".js-create-form", function (e) {
+    //     e.preventDefault();
+    //     alert('HOlaa');
+    //     $('#frmModalMovimiento').validate();
+    // });
+      
     // Create Movimiento Pedido
     $(".js-create").click(loadForm);
-    $("#modal-movimiento").on("submit", ".js-create-form", saveForm);
+    $("#frmModalMovimiento").on("submit", ".js-create-form",saveForm);
   
     // Update Movimiento Pedido
     $("#data").on("click", ".js-update", loadForm);
-    $("#modal-movimiento").on("submit", ".js-update-form", saveForm);
+    $("#frmModalMovimiento").on("submit", ".js-update-form", saveForm);
   
   });
+
+
+
+  

@@ -1,9 +1,6 @@
-
-
 function validar_formulario() {
-
     // document.addEventListener('DOMContentLoaded', function (e) {
-        const form = document.getElementById('modal-movimiento');
+        const form = document.getElementById('frmModalMovimiento');
         const fv = FormValidation.formValidation(form, {
             locale: 'es_ES',
             localization: FormValidation.locales.es_ES,
@@ -102,43 +99,7 @@ function validar_formulario() {
             .on('core.form.valid', function () {
                 console.log('core.form.valid');
                 submit_formdata_with_ajax_form(fv);
-            });
-    // });
-
-
-    $("#modal-movimiento").submit(function(){
-        $(this).validate();
-        
-    });
-};
-
-function valores_por_defecto (){
-     // SUCURSAL POR DEFECTO
-     
-     var action = $('#modal-movimiento input[name="action"]').val();    
-     var sucursal_id = $('#modal-movimiento input[name="sucursal_id"]').val();    
-     var fecha_actual = $('#modal-movimiento input[name="fecha_actual"]').val();    
-
-     if (action =='add'){
-        var sucursal = $('#modal-movimiento select[name="sucursal"]');    
-        sucursal.val(sucursal_id).change();
-     };
-     
-
-    // FECHA DATETIMEPICKER
-    var fecha = $('#modal-movimiento input[name="fecha"]');
-    (fecha.val() == '' ? fecha.val(fecha_actual) : 0)
-    fecha.daterangepicker({
-        language: 'auto',
-        singleDatePicker: true,
-        showDropdowns: true,
-        minYear: 1901,
-        // startDate: fecha.val(),
-        locale: {
-            format: 'DD/MM/YYYY',
-        }
-    });
-
- 
-
+            });    
+    
+          
 };
