@@ -8,12 +8,13 @@ function get_graph_5(args) {
         dataType: 'json',
     }).done(function (request) {
         if (!request.hasOwnProperty('error')) {
+            // console.log(request.series);
             Highcharts.chart('graph_5', {
                 chart: {
-                    type: 'column'
+                    type: 'bar'
                 },
                 title: {
-                    text: '</i><span style="font-size:20px; font-weight: bold;">Pedidos por Area Solicitante Año: ' + args[4] + '</span>'
+                    text: '</i><span style="font-size:20px; font-weight: bold;">Cantidad de Vehículos por Productos </span>'
                 },
                 subtitle: {
                     text: args[0] + '<br> Actualizado: '+ args[1]
@@ -21,48 +22,43 @@ function get_graph_5(args) {
                 exporting: {
                     enabled: true
                 },
-                xAxis: {
-                    // categories: request.categories,
-                    crosshair: true
-                },
+                xAxis: request.xAxis,
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'TOTALES'
+                        text: 'CANTIDAD DE VEHICULOS'
                     }
                 },
                 tooltip: {
-                    headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+                    headerFormat:'<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-                    footerFormat: '</table>',
+                                 '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat:'</table>',
                     shared: true,
                     useHTML: true
                 },
                 plotOptions: {
-                    column: {
-                        pointPadding: 0.1,
-                        borderWidth: 0,  
+                    column: { 
+                        pointPadding: 0.2,
+                        borderWidth: 0,
                         /**/
-                        // stacking: 'normal', 
+                        // stacking: 'normal',
                         dataLabels: {
                             enabled: true
-                        }                         
+                        }
                     },
-                    // series: {
-                    //     dataLabels: {
-                    //         enabled: true,
-                    //         format: '<b>{point.y:.2f}',
-                    //         style: {
-                    //             fontSize: 20 + 'px'
-                    //         }
-                    //     }
-                    // }
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.y}',
+                            style: {
+                                fontSize: 14 + 'px'
+                            }
+                        }
+                    }
                 },
-                series: request
-                // series: request.series
+                series: request.series
             });
-         
             return false;
         }
         message_error(request.error);

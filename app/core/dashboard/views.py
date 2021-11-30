@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.views.generic import TemplateView
 from core.user.models import User
-
+from django.db.models.functions import Coalesce
 locale.setlocale(locale.LC_TIME, '')
 
 
@@ -41,9 +41,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         data = {}
         try:
             action = request.POST['action']
+            anho = int(datetime.datetime.today().strftime('%Y'))
             if action == 'get_graph_1':
                 info = []
-                anho = datetime.datetime.today().strftime('%Y')
+                
                 qs = Movimiento.objects.values('situacion') \
                         .filter(fecha__year=anho)\
                         .exclude(activo=False)\
@@ -60,10 +61,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     'data': info,
                 }
             elif action == 'get_graph_2':
-                info = []
-                anho = int(datetime.datetime.today().strftime('%Y'))-1
+                info = []                
                 qs = Movimiento.objects.values('situacion') \
-                        .filter(fecha__year=anho)\
+                        .filter(fecha__year= anho - 1)\
                         .exclude(activo=False)\
                         .annotate(total=Count('id')) \
                         .order_by('-total')
@@ -78,10 +78,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     'data': info,
                 }
             elif action == 'get_graph_3':
-                info = []
-                anho = int(datetime.datetime.today().strftime('%Y'))-2
+                info = []                
                 qs = Movimiento.objects.values('situacion') \
-                        .filter(fecha__year=anho)\
+                        .filter(fecha__year=anho - 2)\
                         .exclude(activo=False)\
                         .annotate(total=Count('id')) \
                         .order_by('-total')
@@ -95,7 +94,26 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     'colorByPoint': True,
                     'data': info,
                 }
-
+            elif action == 'get_graph_4':
+                info = []
+                for i in Movimiento.objects.values('solicitante__denominacion') \
+                                        .filter(fecha__year=anho,activo=True)\
+                                        .annotate(ctd_pedidos=Count(True)) \
+                                        .order_by('-ctd_pedidos'):
+                                        info.append({'name' : i['solicitante__denominacion'],
+                                                     'data' : [float(i['ctd_pedidos']),]})
+                data = info
+                # print(data)
+            elif action == 'get_graph_5':
+                info = []
+                for i in Movimiento.objects.values('area_solicitante__denominacion') \
+                                        .filter(fecha__year=anho,activo=True)\
+                                        .annotate(ctd_pedidos=Count(True)) \
+                                        .order_by('-ctd_pedidos'):
+                                        info.append({'name' : i['area_solicitante__denominacion'],
+                                                     'data' : [float(i['ctd_pedidos']),]})
+                data = info
+                # print(data)
                 # print(data)
     #         elif action == 'get_graph_2':
     #             data = []

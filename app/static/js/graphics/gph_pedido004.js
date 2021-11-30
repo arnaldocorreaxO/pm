@@ -13,7 +13,7 @@ function get_graph_4(args) {
                     type: 'column'
                 },
                 title: {
-                    text: '</i><span style="font-size:20px; font-weight: bold;">Movimiento Clinker Año ' + args[4] + '</span>'
+                    text: '</i><span style="font-size:20px; font-weight: bold;">Pedidos por Solicitante Año: ' + args[4] + '</span>'
                 },
                 subtitle: {
                     text: args[0] + '<br> Actualizado: '+ args[1]
@@ -22,7 +22,7 @@ function get_graph_4(args) {
                     enabled: true
                 },
                 xAxis: {
-                    categories: request.categories,
+                    // categories: request.categories,
                     crosshair: true
                 },
                 yAxis: {
@@ -32,7 +32,7 @@ function get_graph_4(args) {
                     }
                 },
                 tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                         '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
                     footerFormat: '</table>',
@@ -59,7 +59,8 @@ function get_graph_4(args) {
                     //     }
                     // }
                 },
-                series: request.series
+                series: request
+                // series: request.series
             });
          
             return false;
