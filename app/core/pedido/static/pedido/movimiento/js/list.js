@@ -186,16 +186,32 @@ function getData(all) {
                 }         
             },
             {
-                targets: [3],
-                class: 'text-left',
+                targets: [6],
+                class: 'text-center',
                 render: function (data, type, row) {                   
 
-                        // if (row.tipo_voto.id == 1) {
-                        //     return '<span class="badge badge-danger">' + data + '</span>'
-                        // }
-                        // if (row.tipo_voto.id == 2) {
-                        //     return '<span class="badge badge-info">' + data + '</span>'
-                        // }
+                        if (row.situacion == 'CUMPLIDO') {
+                            return '<span class="badge badge-success">' + data + '</span>'
+                            // return '<h1><span class="badge badge-success"><i class="far fa-thumbs-up"></i></span></h1>'
+                            // return '<button type="button" class="btn btn-success btn-lg" title="Cumplido"><i class="far fa-thumbs-up"></button>'
+                        }
+                        if (row.situacion == 'PARCIAL CUMPLIDO') {
+                            return '<span class="badge badge-warning">' + data + '</span>'
+                            // return '<h1><span class="badge badge-warning"><i class="far fa-thumbs-up"></i></span></h1>'
+                        }
+                        if (row.situacion == 'LICITACION') {
+                            return '<span class="badge badge-info">' + data + '</span>'
+                            // return '<h1><span class="badge badge-warning"><i class="far fa-thumbs-up"></i></span></h1>'
+                        }
+                        if (row.situacion == 'ADJUDICADO') {
+                            return '<span class="badge badge-secondary">' + data + '</span>'
+                            // return '<h1><span class="badge badge-warning"><i class="far fa-thumbs-up"></i></span></h1>'
+                        }
+                        console.log(row.situacion);
+                        if (row.situacion == null) {
+                            return '<span class="badge badge-danger">PENDIENTE</span>'
+                            // return '<h1><span class="badge badge-danger"><i class="far fa-thumbs-down"></i></span></h1>'
+                        }
                         // if (row.tipo_voto.id == 3) {
                         //     return '<span class="badge badge-dark">' + data + '</span>'
                         // }
