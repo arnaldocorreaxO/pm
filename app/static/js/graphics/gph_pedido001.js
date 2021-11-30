@@ -34,7 +34,7 @@ function get_graph_1(args) {
                 depth: 35,
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    format: '<b>{point.name}</b>: {point.percentage:.2f} %'
                 }
             }
         },
