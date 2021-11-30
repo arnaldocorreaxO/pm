@@ -1,4 +1,46 @@
+
 function get_graph_2(args) {
+
+    var anho=parseInt(args[4])-1
+    var graph_1 = Highcharts.chart('graph_2', {
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45,
+                beta: 0
+            }
+        },
+        exporting: {
+            enabled: true
+        },
+        title: {
+            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año: ' + anho + '</span>'
+        },
+        subtitle: {
+            text: args[0] + '<br> Actualizado: ' + args[1]
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        tooltip: {
+            pointFormat: 'Total: <b>{point.y:.0f} UND.</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                depth: 35,
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.2f} %'
+                }
+            }
+        },
+    });
+
     $.ajax({
         url: window.location.pathname,
         type: 'POST',
@@ -8,60 +50,7 @@ function get_graph_2(args) {
         dataType: 'json',
     }).done(function (request) {
         if (!request.hasOwnProperty('error')) {
-            Highcharts.chart('graph_2', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: '</i><span style="font-size:20px; font-weight: bold;">Movimiento del Día ' + args[2] + '</span>'
-                },
-                subtitle: {
-                    text: args[0] + '<br> Actualizado: '+ args[1]
-                },
-                exporting: {
-                    enabled: true
-                },
-                xAxis: {
-                    categories: request.categories,
-                    crosshair: true
-                },
-                yAxis: {
-                    // type: 'category',
-                    min: 0,
-                    title: {
-                        text: 'TOTALES'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {     
-                        pointPadding: 0.1,            
-                        borderWidth: 0,
-                        /**/
-                        // stacking: 'normal',
-                        dataLabels: {
-                            enabled: true
-                        }
-                    },
-                    // series: {
-                    //     dataLabels: {
-                    //         enabled: true,
-                    //         format: '<b>{point.y:.2f}',
-                    //         style: {
-                    //             fontSize: 20 + 'px'
-                    //         }
-                    //     }
-                    // }
-                },
-                series: request.series
-            });
+            graph_1.addSeries(request);
             return false;
         }
         message_error(request.error);

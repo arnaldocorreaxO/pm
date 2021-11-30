@@ -5,8 +5,8 @@ from django.db.models.aggregates import Count
 from django.db.models.fields import FloatField
 from django.db.models.query_utils import Q
 
-from core.pedido.models import Movimiento
-from core.base.models import Empresa
+from core.pedido.models import Dependencia, Movimiento
+from core.base.models import Empresa, Sucursal
 from core.security.models import Dashboard
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
@@ -43,14 +43,48 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             action = request.POST['action']
             if action == 'get_graph_1':
                 info = []
-                hoy = datetime.datetime.now()
+                anho = datetime.datetime.today().strftime('%Y')
                 qs = Movimiento.objects.values('situacion') \
-                        .filter(fecha__year =2020)\
+                        .filter(fecha__year=anho)\
                         .exclude(activo=False)\
                         .annotate(total=Count('id')) \
                         .order_by('-total')
-                print(qs.query)
-                c=0
+                for i in qs:
+                    SITUACION_PEDIDO = dict(Movimiento().SITUACION_PEDIDO )
+                    info.append([SITUACION_PEDIDO[i['situacion']],
+                                                  i['total']])
+                data = {
+                    'name': 'Situacion Pedido',
+                    'type': 'pie',
+                    'colorByPoint': True,
+                    'data': info,
+                }
+            elif action == 'get_graph_2':
+                info = []
+                anho = int(datetime.datetime.today().strftime('%Y'))-1
+                qs = Movimiento.objects.values('situacion') \
+                        .filter(fecha__year=anho)\
+                        .exclude(activo=False)\
+                        .annotate(total=Count('id')) \
+                        .order_by('-total')
+                for i in qs:
+                    SITUACION_PEDIDO = dict(Movimiento().SITUACION_PEDIDO )
+                    info.append([SITUACION_PEDIDO[i['situacion']],
+                                                  i['total']])
+                data = {
+                    'name': 'Situacion Pedido',
+                    'type': 'pie',
+                    'colorByPoint': True,
+                    'data': info,
+                }
+            elif action == 'get_graph_3':
+                info = []
+                anho = int(datetime.datetime.today().strftime('%Y'))-2
+                qs = Movimiento.objects.values('situacion') \
+                        .filter(fecha__year=anho)\
+                        .exclude(activo=False)\
+                        .annotate(total=Count('id')) \
+                        .order_by('-total')
                 for i in qs:
                     SITUACION_PEDIDO = dict(Movimiento().SITUACION_PEDIDO )
                     info.append([SITUACION_PEDIDO[i['situacion']],
@@ -298,9 +332,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['mes_actual'] = datetime.datetime.today().strftime("%B").capitalize()
         context['anho_actual'] = datetime.datetime.today().strftime("%Y")
         context['empresa'] = Empresa.objects.first()
-        # context['clientes'] = Cliente.objects.all().count()
-        # context['categorias'] = Categoria.objects.filter().count()
-        # context['productos'] = Producto.objects.all().count()
+        context['sucursales'] = Sucursal.objects.filter(activo=True).count()
+        context['dependencias'] = Dependencia.objects.filter(activo=True).count()
+        context['pedidos'] = Movimiento.objects.filter(fecha__year=datetime.datetime.today().strftime("%Y")).count()
         context['movimientos'] = Movimiento.objects.filter().order_by('-id')[0:10]
         context['usuario'] = User.objects.filter(id=self.request.user.id).first()
         return context

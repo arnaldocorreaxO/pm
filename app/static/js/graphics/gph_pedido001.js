@@ -11,13 +11,13 @@ function get_graph_1(args) {
             }
         },
         exporting: {
-            enabled: false
+            enabled: true
         },
         title: {
-            text: ''
+            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año:' + args[4] + '</span>'
         },
         subtitle: {
-            text: args[0] + '<br> Actualizado: '+ args[1]
+            text: args[0] + '<br> Actualizado: ' + args[1]
         },
         accessibility: {
             point: {

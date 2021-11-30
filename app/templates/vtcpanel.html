@@ -213,6 +213,29 @@
                     </div>
                 </div>
             </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title"><i class="fas fa-industry"></i> Situación Pedidos de Materiales {{ current_date }}</h3> -->
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="graph_2" style="height: 64vh;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title"><i class="fas fa-industry"></i> Situación Pedidos de Materiales {{ current_date }}</h3> -->
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="graph_3" style="height: 64vh;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>           
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -278,7 +301,8 @@
                     args.push("{{anho_actual}}");
                     
                     get_graph_1(args);
-                    // get_graph_2(args);
+                    get_graph_2(args);
+                    get_graph_3(args);
                     // get_graph_3(args);
                     // get_graph_4(args);
                     // get_graph_5(args);
