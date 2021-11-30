@@ -143,9 +143,12 @@ class SearchForm(forms.Form):
     #     'class': 'form-control',
     #     'autocomplete': 'off'
     # }))
+    choiceSituacion = Movimiento().ESTADO_PEDIDO
+    choiceSituacion = choiceSituacion + (('','Todos'),)
 
     anho = ModelChoiceFieldAnho(queryset=Movimiento.objects.filter(activo__exact=True).order_by(
         '-anho').distinct('anho'), to_field_name='anho', empty_label="(Todos)")
+    situacion = forms.ChoiceField(choices=choiceSituacion)
     solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
         dependencia_padre__isnull=True, activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
     area_solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
@@ -156,6 +159,7 @@ class SearchForm(forms.Form):
     
     term.widget.attrs.update({'class': 'form-control'})
     anho.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
+    situacion.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     solicitante.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     area_solicitante.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     

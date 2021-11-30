@@ -1,5 +1,4 @@
 var tblData;
-var input_daterange;
 var columns = [];
 
 function init() {
@@ -36,6 +35,7 @@ function getData(all) {
     if (all=='all'){
         input_term.val("");
         select_anho.val("").change();
+        select_situacion.val("").change();
         select_solicitante.val("").change();
         select_area_solicitante.val("").change();
     }
@@ -44,11 +44,17 @@ function getData(all) {
         'action': 'search',
         'start_date': input_daterange.data('daterangepicker').startDate.format('YYYY-MM-DD'),
         'end_date': input_daterange.data('daterangepicker').endDate.format('YYYY-MM-DD'),
-        'term': input_term.val(),
-        'anho': select_anho.val().join(", "),
-        'solicitante': select_solicitante.val().join(", "),
-        'area_solicitante': select_area_solicitante.val().join(", "),        
+        'term': input_term.val(),        
+        'anho':(select_anho.val().includes('')?'*':select_anho.val().join(", ")),
+        'situacion': "'"+(select_situacion.val().includes('')?'*':select_situacion.val().join("','"))+"'",
+        'solicitante': (select_solicitante.val().includes('')?'*':select_solicitante.val().join(", ")),
+        'area_solicitante': (select_area_solicitante.val().includes('')?'*':select_area_solicitante.val().join(", "))   
     };
+
+    console.log(select_anho.val().includes(''));
+    console.log(select_situacion.val().includes(''));
+    console.log(select_solicitante.val().includes(''));
+    console.log(select_area_solicitante.val().includes(''));
 
     if (all!='bday') {
         parameters['start_date'] = '';
@@ -161,74 +167,28 @@ function getData(all) {
             {
                 targets: [0],
                 class: 'text-center',
-                render: function (data, type, row) {
-                   
-                //    var badge_pc = '<span class="badge badge-warning">' + ' PC ' + '</span>';
-                //    var badge_mv = '<span class="badge badge-success">' + ' SI ' + '</span>';
-                //    var badge_no = '<span class="badge badge-danger"> NO </span>';
-                //    var badges = badge_no; /*Default*/
-                    
-                //         if (row.pasoxpc =='S') {
-                //             badges = badge_pc  + badge_no;
-                //         }
-                //         if (row.pasoxmv =='S') {
-                //             badges = badge_mv;
-                //             if (row.pasoxpc =='S') {
-                //                 badges = badge_pc  + badge_mv;
-                //             }
-                //         }     
-                //         if (row.tipo_voto.id == 11){
-                //            return '<span class="badge badge-secondary">'+ row.tipo_voto.cod +'</span>';
-                //         }                  
-                     
-                //      return badges;
-                return data;
+                render: function (data, type, row) {                
+                          return data;
                 }         
             },
             {
                 targets: [6],
                 class: 'text-center',
-                render: function (data, type, row) {                   
+                render: function (data, type, row) {  
+                    
+                        switch(row.situacion){
+                            case 'CUMPLIDO':
+                                return '<span class="badge badge-success">' + data + '</span>'
+                            case 'PARCIAL CUMPLIDO':
+                                return '<span class="badge badge-warning">' + data + '</span>'
+                            case 'LICITACION':
+                                return '<span class="badge badge-info">' + data + '</span>'
+                            case 'ADJUDICADO':
+                                return '<span class="badge badge-secondary">' + data + '</span>'
+                            default:
+                                return '<span class="badge badge-danger">PENDIENTE</span>'
 
-                        if (row.situacion == 'CUMPLIDO') {
-                            return '<span class="badge badge-success">' + data + '</span>'
-                            // return '<h1><span class="badge badge-success"><i class="far fa-thumbs-up"></i></span></h1>'
-                            // return '<button type="button" class="btn btn-success btn-lg" title="Cumplido"><i class="far fa-thumbs-up"></button>'
-                        }
-                        if (row.situacion == 'PARCIAL CUMPLIDO') {
-                            return '<span class="badge badge-warning">' + data + '</span>'
-                            // return '<h1><span class="badge badge-warning"><i class="far fa-thumbs-up"></i></span></h1>'
-                        }
-                        if (row.situacion == 'LICITACION') {
-                            return '<span class="badge badge-info">' + data + '</span>'
-                            // return '<h1><span class="badge badge-warning"><i class="far fa-thumbs-up"></i></span></h1>'
-                        }
-                        if (row.situacion == 'ADJUDICADO') {
-                            return '<span class="badge badge-secondary">' + data + '</span>'
-                            // return '<h1><span class="badge badge-warning"><i class="far fa-thumbs-up"></i></span></h1>'
-                        }
-                        console.log(row.situacion);
-                        if (row.situacion == null) {
-                            return '<span class="badge badge-danger">PENDIENTE</span>'
-                            // return '<h1><span class="badge badge-danger"><i class="far fa-thumbs-down"></i></span></h1>'
-                        }
-                        // if (row.tipo_voto.id == 3) {
-                        //     return '<span class="badge badge-dark">' + data + '</span>'
-                        // }
-                        // if (row.tipo_voto.id == 4) {
-                        //     return '<span class="badge badge-success">' + data + '</span>'
-                        // }
-                        // // Ausentes
-                        // if (row.tipo_voto.id == 13){
-                        //     return '<span class="badge badge-warning">'+ data +'</span>';
-                        //  }   
-                        // //  Fallecidos
-                        //  if (row.tipo_voto.id == 11){
-                        //     return '<span class="badge badge-secondary">'+ data +'</span>';
-                        //  }   
-                        // //Otros
-                        return data;
-                        
+                        };
                 }         
             },
             {
@@ -261,6 +221,7 @@ $(function () {
     current_date = new moment().format('YYYY-MM-DD');
     input_daterange = $('input[name="date_range"]');    
     select_anho = $('select[name="anho"]');
+    select_situacion = $('select[name="situacion"]');
     select_solicitante = $('select[name="solicitante"]');
     select_area_solicitante = $('select[name="area_solicitante"]');
 

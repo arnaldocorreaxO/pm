@@ -76,12 +76,16 @@ class MovimientoListView(PermissionMixin, FormView):
 				start_date = request.POST['start_date']
 				end_date = request.POST['end_date']
 				anho = request.POST.getlist('anho') if 'anho' in request.POST else None				
+				situacion = request.POST.getlist('situacion') if 'situacion' in request.POST else None
 				solicitante = request.POST.getlist('solicitante') if 'solicitante' in request.POST else None
 				area_solicitante = request.POST.getlist('area_solicitante') if 'area_solicitante' in request.POST else None
 
 				anho = ",".join(anho) if anho!=[''] else None
+				situacion = ",".join(situacion) if situacion!=[''] else None
 				solicitante = ",".join(solicitante) if solicitante!=[''] else None
 				area_solicitante = ",".join(area_solicitante) if area_solicitante!=[''] else None
+
+				print(situacion)
 
 				_start = request.POST['start']
 				_length = request.POST['length']
@@ -124,11 +128,17 @@ class MovimientoListView(PermissionMixin, FormView):
 						_where = " upper(descripcion||' '|| destino) LIKE upper(%s)"			
 
 				if anho:
-					_where += f" AND pedido_movimiento.anho IN ({anho})"
+					if not '*' in anho:
+						_where += f" AND pedido_movimiento.anho IN ({anho})"
+				if situacion:
+					if not '*' in situacion:						
+						_where += f" AND pedido_movimiento.situacion IN ({situacion})"
 				if solicitante:
-					_where += f" AND pedido_movimiento.solicitante_id IN ({solicitante})"
+					if not '*' in solicitante:
+						_where += f" AND pedido_movimiento.solicitante_id IN ({solicitante})"
 				if area_solicitante:
-					_where += f" AND pedido_movimiento.area_solicitante_id IN ({area_solicitante})"
+					if not '*' in area_solicitante:
+						_where += f" AND pedido_movimiento.area_solicitante_id IN ({area_solicitante})"
 				# if len(pasoxpc):
 				# 	_where += f" AND COALESCE(electoral_movimiento.pasoxpc,'N') = '{pasoxpc}'"
 				# if len(pasoxmv):

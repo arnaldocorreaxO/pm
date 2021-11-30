@@ -49,11 +49,11 @@ class Destino(ModeloBase):
 '''PEDIDOS DE MATERIALES Y/O BIENES'''
 class Movimiento(ModeloBase):	
 	ESTADO_PEDIDO=(
-		(' ','PENDIENTE'),
-		('P','PARCIAL CUMPLIDO'),
-		('C','CUMPLIDO'),
-		('A','ADJUDICADO'),
-		('L','LICITACION'),		
+		('PEND','PENDIENTE'),
+		('PARC','PARCIAL CUMPLIDO'),
+		('CUMP','CUMPLIDO'),
+		('ADJU','ADJUDICADO'),
+		('LICI','LICITACION'),		
 	)		
 	sucursal = models.ForeignKey(Sucursal,on_delete=models.PROTECT)	
 	nro_pedido = models.IntegerField() 
@@ -64,7 +64,7 @@ class Movimiento(ModeloBase):
 	descripcion = models.CharField(max_length=250)	
 	destino = models.CharField(max_length=250)	
 	# destino = models.ForeignKey(Destino,on_delete=models.PROTECT)
-	situacion = models.CharField(max_length=2,choices=ESTADO_PEDIDO,null=True,blank=True)
+	situacion = models.CharField(max_length=4,choices=ESTADO_PEDIDO,null=True,blank=True,default='PEND')
 	ref_doc_asociado = models.TextField(null=True,blank=True) #Remisiones, Contrato, Ordenes de Compra
 	ref_ped_anterior = models.CharField(max_length=100,null=True,blank=True) #Referencia Pedido Anterior
 	nro_expediente = models.CharField(max_length=10,null=True,blank=True)
