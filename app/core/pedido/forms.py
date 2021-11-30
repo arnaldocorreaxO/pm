@@ -143,7 +143,7 @@ class SearchForm(forms.Form):
     #     'class': 'form-control',
     #     'autocomplete': 'off'
     # }))
-    choiceSituacion = Movimiento().ESTADO_PEDIDO
+    choiceSituacion = Movimiento().SITUACION_PEDIDO
     choiceSituacion = choiceSituacion + (('','Todos'),)
 
     anho = ModelChoiceFieldAnho(queryset=Movimiento.objects.filter(activo__exact=True).order_by(

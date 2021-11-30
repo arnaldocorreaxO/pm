@@ -85,8 +85,6 @@ class MovimientoListView(PermissionMixin, FormView):
 				solicitante = ",".join(solicitante) if solicitante!=[''] else None
 				area_solicitante = ",".join(area_solicitante) if area_solicitante!=[''] else None
 
-				print(situacion)
-
 				_start = request.POST['start']
 				_length = request.POST['length']
 				_search = request.POST['search[value]']

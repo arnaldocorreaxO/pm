@@ -48,7 +48,7 @@ class Destino(ModeloBase):
 
 '''PEDIDOS DE MATERIALES Y/O BIENES'''
 class Movimiento(ModeloBase):	
-	ESTADO_PEDIDO=(
+	SITUACION_PEDIDO=(
 		('PEND','PENDIENTE'),
 		('PARC','PARCIAL CUMPLIDO'),
 		('CUMP','CUMPLIDO'),
@@ -64,7 +64,7 @@ class Movimiento(ModeloBase):
 	descripcion = models.CharField(max_length=250)	
 	destino = models.CharField(max_length=250)	
 	# destino = models.ForeignKey(Destino,on_delete=models.PROTECT)
-	situacion = models.CharField(max_length=4,choices=ESTADO_PEDIDO,null=True,blank=True,default='PEND')
+	situacion = models.CharField(max_length=4,choices=SITUACION_PEDIDO,null=True,blank=True,default='PEND')
 	ref_doc_asociado = models.TextField(null=True,blank=True) #Remisiones, Contrato, Ordenes de Compra
 	ref_ped_anterior = models.CharField(max_length=100,null=True,blank=True) #Referencia Pedido Anterior
 	nro_expediente = models.CharField(max_length=10,null=True,blank=True)
@@ -78,7 +78,7 @@ class Movimiento(ModeloBase):
 		# print test["hi"] # prints 1
 		# Opcion 2
 		# [tup for tup in a if tup[0] == 1]
-		estado_pedido = dict(self.ESTADO_PEDIDO)
+		estado_pedido = dict(self.SITUACION_PEDIDO)
 		item = model_to_dict(self)
 		item['fecha'] = self.fecha.strftime('%d/%m/%Y') if self.fecha else None
 		item['solicitante_denom_corta'] = self.solicitante.nombre_corto() if self.solicitante else None

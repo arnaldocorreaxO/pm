@@ -52,23 +52,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 print(qs.query)
                 c=0
                 for i in qs:
-                    mov = Movimiento()
-                    mov.ESTADO_PEDIDO
-                    print(mov.ESTADO_PEDIDO)
-                    estado_pedido = dict(mov.ESTADO_PEDIDO)
-                    print(estado_pedido)
-                    situacion = i['situacion']
-                    print(situacion)
-                    if situacion is None or situacion=='':
-                        c+=i['total']
-                    else:
-                        situacion = estado_pedido[situacion]
-                        info.append([situacion,
-                                    i['total']])
-                    
-                info.append(['PENDIENTE',
-                             c])
-
+                    SITUACION_PEDIDO = dict(Movimiento().SITUACION_PEDIDO )
+                    info.append([SITUACION_PEDIDO[i['situacion']],
+                                                  i['total']])
                 data = {
                     'name': 'Situacion Pedido',
                     'type': 'pie',
@@ -76,7 +62,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     'data': info,
                 }
 
-                print(data)
+                # print(data)
     #         elif action == 'get_graph_2':
     #             data = []
     #             categorias=[]
