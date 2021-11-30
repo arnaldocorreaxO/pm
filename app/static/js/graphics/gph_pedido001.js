@@ -25,7 +25,7 @@ function get_graph_1(args) {
             }
         },
         tooltip: {
-            pointFormat: 'Total: <b>{point.y:.0f} UN.</b>'
+            pointFormat: 'Total: <b>{point.y:.0f} UND.</b>'
         },
         plotOptions: {
             pie: {
