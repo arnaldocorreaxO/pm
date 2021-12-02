@@ -6,24 +6,24 @@
 <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.css' %}" />
 <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/spanish.js' %}"></script>
 <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.js' %}"></script>
-<script src="{% static '/bascula/js/rpt_bascula001.js' %}"></script>
+<script src="{% static '/pedido/js/rpt_pedido001.js' %}"></script>
 {% endblock %}
 
 {% block params_report %}
 <div class="row">
     <div class="col-lg-6">
         <div class="form-group">
-            <label>Por Cliente</label>
+            <label>Por Año:</label>
             <div class="input-group mb-3">
-                {{ form.cliente }}
+                {{ form.anho }}
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="form-group">
-            <label>Por Producto</label>
+            <label>Por Situacion:</label>
             <div class="input-group mb-3">
-                {{ form.producto }}
+                {{ form.situacion }}
             </div>
         </div>
     </div>
@@ -31,46 +31,39 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="form-group">
-            <label>Por Vehiculo</label>
+            <label>Por Solicitante:</label>
             <div class="input-group mb-3">
-                {{ form.vehiculo }}
+                {{ form.solicitante }}
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="form-group">
-            <label>Por Chofer</label>
+            <label>Por Area Solicitante:</label>
             <div class="input-group mb-3">
-                {{ form.chofer }}
+                {{ form.area_solicitante }}
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-6">
+<div class="row">   
+    <div class="col-lg-5">
         <div class="form-group">
             <label>Rangos de fechas:</label>
             <div class="input-group mb-3">
-                {{ form.date_range }}
+                {{ form.date_range }}                
             </div>
         </div>
-    </div>       
-    <!-- <div class="col-lg-3">
+    </div>    
+    <div class="col-lg-1">
         <div class="form-group">
-            <label>Rangos de horas entrada:</label>
+            <label>-</label>
             <div class="input-group mb-3">
-                {{ form.time_range_in }}
+                {{ form.habilita_fecha }}                
             </div>
         </div>
-    </div>       
-    <div class="col-lg-3">
-        <div class="form-group">
-            <label>Rangos de horas salida:</label>
-            <div class="input-group mb-3">
-                {{ form.time_range_out }}
-            </div>
-        </div>
-    </div>        -->
+    </div>    
+     
 </div>
 
 {% endblock %}

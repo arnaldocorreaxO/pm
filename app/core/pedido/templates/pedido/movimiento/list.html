@@ -7,11 +7,10 @@
 {% endblock %}
 
 
-{%block javascript_list%}
-<script src="{% static 'pedido/movimiento/js/list.js' %}"></script>
-<script src="{% static 'pedido/movimiento/js/select2_filtrar_area_solicitante.js' %}"></script>
-
-{%endblock%}
+{% block javascript_list %}
+    <script src="{% static 'pedido/movimiento/js/list.js' %}"></script>
+    <script src="{% static 'pedido/movimiento/js/select2_filtrar_area_solicitante.js' %}"></script>
+{% endblock %}
 
 {% block columns %}
     <th style="width: 5%;">N° Ped.</th>
@@ -65,19 +64,22 @@
   
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="form-group">
                 <label>Rangos de fechas:</label>
                 <div class="input-group mb-3">
-                    {{ form.date_range }}
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary btnSearch" type="button">
-                            <i class="fas fa-calendar-check"></i> Filtrar por fechas 
-                        </button>
-                    </div>
+                    {{ form.date_range }}                
                 </div>
             </div>
-        </div>
+        </div>    
+        <div class="col-lg-1">
+            <div class="form-group">
+                <label>-</label>
+                <div class="input-group mb-3">
+                    {{ form.habilita_fecha }}                
+                </div>
+            </div>
+        </div>    
         <div class="col-lg-6">
             <div class="form-group">
                 <label>Buscar por Numero ó Descripción Pedido </label>
@@ -124,3 +126,4 @@
     </div>
 </div>
 {% endblock %}
+

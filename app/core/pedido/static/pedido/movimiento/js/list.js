@@ -1,6 +1,5 @@
 var tblData;
 var columns = [];
-
 function init() {
     $(document).ready(function () {
         $('.select2').select2({
@@ -8,6 +7,7 @@ function init() {
             language: 'es',
 
         });
+        $('input[name="date_range"]').prop('disabled', true);
         filtrar_area_solicitante();
 
     });
@@ -45,20 +45,21 @@ function getData(all) {
         'action': 'search',
         'start_date': input_daterange.data('daterangepicker').startDate.format('YYYY-MM-DD'),
         'end_date': input_daterange.data('daterangepicker').endDate.format('YYYY-MM-DD'),
-        'term': input_term.val(),        
+        'term': input_term.val(), 
         'anho':(select_anho.val().includes('')?'*':select_anho.val().join(", ")),
         'situacion': "'"+(select_situacion.val().includes('')?'*':select_situacion.val().join("','"))+"'",
         'solicitante': (select_solicitante.val().includes('')?'*':select_solicitante.val().join(", ")),
         'area_solicitante': (select_area_solicitante.val().includes('')?'*':select_area_solicitante.val().join(", "))   
+    }; 
+
+    if ($('input[name="habilita_fecha"]').prop('checked')!=true) {  
+            parameters['start_date']= '';
+            parameters['end_date']= '';    
     };
 
-    if (all!='bday') {
-        parameters['start_date'] = '';
-        parameters['end_date'] = '';
-    }
+
     
-    tblData = $('#data').DataTable({
-        
+    tblData = $('#data').DataTable({        
         responsive: true,
         autoWidth: false,
         destroy: true,
@@ -170,28 +171,27 @@ function getData(all) {
             {
                 targets: [6],
                 class: 'text-center',
-                render: function (data, type, row) {  
-                    
-                        switch(row.situacion){
-                            case 'CUMPLIDO':
-                                return '<span class="badge badge-success">' + data + '</span>'
-                            case 'PARCIAL CUMPLIDO':
-                                return '<span class="badge badge-warning">' + data + '</span>'
-                            case 'LICITACION':
-                                return '<span class="badge badge-info">' + data + '</span>'
-                            case 'ADJUDICADO':
-                                return '<span class="badge badge-secondary">' + data + '</span>'
-                            default:
-                                return '<span class="badge badge-danger">PENDIENTE</span>'
-
-                        };
-                }         
+                render: function (data, type, row) {
+                    switch (row.situacion) {
+                        case 'CUMPLIDO':
+                            return '<span class="badge badge-success">' + data + '</span>'
+                        case 'PARCIAL CUMPLIDO':
+                            return '<span class="badge badge-warning">' + data + '</span>'
+                        case 'LICITACION':
+                            return '<span class="badge badge-info">' + data + '</span>'
+                        case 'ADJUDICADO':
+                            return '<span class="badge badge-secondary">' + data + '</span>'
+                        default:
+                            return '<span class="badge badge-danger">PENDIENTE</span>'
+                    };
+                }
             },
             {
                 targets: [-1],
                 class: 'text-center',
                 render: function (data, type, row) {
-                    var buttons = '';                    
+                    var buttons = '';  
+                    // buttons += '<button type="button" class="btn btn-primary js-detail" data-url="/pedido/movimiento/detail/' + row.id + '/"><i class="fas fa-folder-open"></i></button>';
                     buttons += '<button type="button" class="btn btn-warning js-update" data-url="/pedido/movimiento/update/' + row.id + '/"><i class="fas fa-edit"></i></button>';
                     return buttons;
                 }
@@ -236,11 +236,7 @@ $(function () {
     $('.drp-buttons').hide();
 
     init();
-    getData('all');
-
-    $('.btnSearch').on('click', function () {
-        getData('bday');
-    });
+    getData('all'); 
 
     $('.btnFilter').on('click', function () {
         getData('filter');
@@ -255,8 +251,6 @@ $(function () {
         if(e.keyCode==13)
         $('.btnFilter').click();
       });
-
-   
 
 });
 
@@ -285,14 +279,8 @@ $(function () {
     };
   
     var saveForm = function () {
-        // Habilitamos antes de submit
-        // var select_seccional = $('#frmForm #id_seccional')
-        // var select_local_votacion = $('#frmForm #id_local_votacion')
-        // select_seccional.prop("disabled", false);
-        // select_local_votacion.prop("disabled", false);
-
-
-        var form = $(this);   
+        var form = $(this);  
+        // Habilitamos antes de submit 
         $('#frmModalMovimiento select[name="sucursal"]').prop('disabled', false);     
             $.ajax({
                 url: form.attr("action"),
@@ -319,12 +307,6 @@ $(function () {
         return false;
     };
 
-    // $('#frmModalMovimiento').on('submit',".js-create-form", function (e) {
-    //     e.preventDefault();
-    //     alert('HOlaa');
-    //     $('#frmModalMovimiento').validate();
-    // });
-      
     // Create Movimiento Pedido
     $(".js-create").click(loadForm);
     $("#frmModalMovimiento").on("submit", ".js-create-form",saveForm);
@@ -332,6 +314,19 @@ $(function () {
     // Update Movimiento Pedido
     $("#data").on("click", ".js-update", loadForm);
     $("#frmModalMovimiento").on("submit", ".js-update-form", saveForm);
+    
+    // Update Movimiento Pedido
+    // $("#data").on("click", ".js-detail", loadForm);
+
+
+    $('input[name="habilita_fecha"]').change(function () {
+        if ($(this).prop('checked')) {
+            $('input[name="date_range"]').prop('disabled', false);
+        } else {
+            $('input[name="date_range"]').prop('disabled', true);
+        };
+    });
+
   
   });
 

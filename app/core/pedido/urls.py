@@ -19,5 +19,6 @@ urlpatterns = [
     path('movimiento', MovimientoListView.as_view(), name='movimiento_list'),
     path('movimiento/add/', MovimientoCreateView.as_view(), name='movimiento_create'),
     path('movimiento/update/<int:pk>/', MovimientoUpdateView.as_view(), name='movimiento_update'),
+    path('movimiento/detail/<int:pk>/', MovimientoDetailView.as_view(), name='movimiento_detail'),
     path('movimiento/delete/<int:pk>/', MovimientoListView.as_view(), name='movimiento_delete'),    
    ]

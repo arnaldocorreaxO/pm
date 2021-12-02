@@ -10,7 +10,7 @@ from django.http import JsonResponse, HttpResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.views.generic.edit import FormView
 
 from core.pedido.forms import Movimiento, MovimientoForm, SearchForm
@@ -21,6 +21,43 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 from django.contrib.auth.decorators import permission_required
+
+class MovimientoDetailView(PermissionMixin, DetailView):
+	model = Movimiento
+	template_name = 'pedido/movimiento/create.html'
+	form_class = MovimientoForm
+	success_url = reverse_lazy('movimiento_list')
+	permission_required = 'view_movimiento'
+
+	@method_decorator(csrf_exempt)
+	def dispatch(self, request, *args, **kwargs):
+		return super().dispatch(request, *args, **kwargs)
+
+	# Este usamos para el modal 	
+	def get(self, request, *args, **kwargs):
+		data = {}				
+		try:	
+			if request.user.has_perm('pedido.view_movimiento'):			
+				pk = kwargs['pk']
+				movimiento = get_object_or_404(Movimiento, pk=pk)
+				form = MovimientoForm(instance=movimiento)
+				self.template_name = 'pedido/movimiento/create_modal.html'
+				# context = self.get_context_data(**kwargs)
+				context={}
+				context['data'] = movimiento
+				context['form'] = form				
+				context['class_form'] = 'js-detail-form'
+				# context['action_url'] = reverse_lazy('movimiento_update', kwargs={'pk': pk})
+				data['html_form'] = render_to_string(self.template_name, context, request=request)
+			else:
+				data['error'] = 'No tiene permisos para visualizar'
+		
+		except Exception as e:
+			data['error'] = str(e)
+		# print(data['html_form'])
+		return HttpResponse(json.dumps(data), content_type='application/json')
+		#return  JsonResponse(data)
+
 
 class MovimientoListView(PermissionMixin, FormView):	
 	# model = Movimiento
@@ -65,14 +102,14 @@ class MovimientoListView(PermissionMixin, FormView):
 				
 				qs = Dependencia.objects.filter(activo__exact=True)\
 										.extra(where=[_where])\
-									    .order_by('denominacion')	
+										.order_by('denominacion')	
 				# print(qs.query)
 				for i in qs:
 					# data.append({'id': i.id, 'text': i.denominacion, 'data': i.barrio.toJSON()})
 					data.append({'id': i.id, 'text': i.denominacion})	
 			elif action == 'search':
 				data = []
-				term = request.POST['term']
+				term = request.POST['term']		
 				start_date = request.POST['start_date']
 				end_date = request.POST['end_date']
 				anho = request.POST.getlist('anho') if 'anho' in request.POST else None				
@@ -149,7 +186,7 @@ class MovimientoListView(PermissionMixin, FormView):
 								.order_by(*_order)
 
 				#Pedidos del Año
-				if len(start_date) and len(end_date):
+				if len(start_date) and len(end_date):			
 					start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
 					qs = qs.filter(fecha__range=(start_date,end_date))
 								   
@@ -179,6 +216,10 @@ class MovimientoListView(PermissionMixin, FormView):
 						'per_page': per_page,  # [opcional]
 						'recordsTotal': total,
 						'recordsFiltered': total, }
+			elif action == 'search_detpedido':
+				data = []
+				for det in Movimiento.objects.filter(id=request.POST['id']):
+					data.append(det.toJSON())
 			else:
 				data['error'] = 'No ha ingresado una opción'
 		except Exception as e:

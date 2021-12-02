@@ -135,14 +135,9 @@ class SearchForm(forms.Form):
     }))
     # Termino de busqueda 
     term = forms.CharField()
-    # time_range_in = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class': 'form-control',
-    #     'autocomplete': 'off'
-    # }))
-    # time_range_out = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class': 'form-control',
-    #     'autocomplete': 'off'
-    # }))
+
+    habilita_fecha = forms.BooleanField(initial=False,required=False)
+
     choiceSituacion = Movimiento().SITUACION_PEDIDO
     choiceSituacion = choiceSituacion + (('','Todos'),)
 
@@ -162,7 +157,5 @@ class SearchForm(forms.Form):
     situacion.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     solicitante.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     area_solicitante.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
+    habilita_fecha.widget.attrs.update({'class': 'form-control'})
     
-    # producto.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
-    # vehiculo.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
-    # chofer.widget.attrs.update({'class': 'form-control select2','multiple':'true'})    
