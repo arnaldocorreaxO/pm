@@ -1,6 +1,6 @@
 
 var input_daterange;
-var c=0;
+
 // INIT LOAD
 $(function () {
     current_date = new moment().format('YYYY-MM-DD');
@@ -20,15 +20,13 @@ $(function () {
         });
 
 
-      $('input[name="habilita_fecha"]').on('click',function(){            
-            c++;
-            if (c % 2 == 0){
+        $('input[name="habilita_fecha"]').change(function () {
+            if ($(this).prop('checked')) {
+                $('input[name="date_range"]').prop('disabled', false);
+            } else {
                 $('input[name="date_range"]').prop('disabled', true);
-                return
-            }
-            $('input[name="date_range"]').prop('disabled', false);
-      });
-
+            };
+        });
 
       filtrar_area_solicitante();
 
