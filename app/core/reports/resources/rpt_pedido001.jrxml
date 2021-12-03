@@ -35,6 +35,7 @@
 	ARE.DENOM_CORTA AS AREA_SOLICITANTE,
 	MOV.DESCRIPCION,
 	MOV.DESTINO,
+	MOV.NRO_EXPEDIENTE,
 	MOV.REF_DOC_ASOCIADO,
 	MOV.REF_PED_ANTERIOR,
 	CASE MOV.SITUACION 
@@ -42,7 +43,7 @@
 		WHEN 'PARC' THEN 'PARC. CUMP.'
 		WHEN 'LICI' THEN 'LICITACION'
 		WHEN 'ADJU' THEN 'ADJUDICADO'
-		ELSE 'PENDIENTE'
+		ELSE NULL
 	END AS SITUACION
 	
 FROM 
@@ -56,6 +57,7 @@ AND  (MOV.SOLICITANTE_ID IN ($P!{P_SOLICITANTE_ID}) OR $P{P_SOLICITANTE_ID}  IS 
 AND  (MOV.AREA_SOLICITANTE_ID IN ($P!{P_AREA_SOLICITANTE_ID}) OR $P{P_AREA_SOLICITANTE_ID}  IS NULL) 
 AND  (MOV.FECHA >= TO_DATE($P{P_FECHA_DESDE},'YYYY-MM-DD') OR $P{P_FECHA_DESDE} IS NULL) 
 AND  (MOV.FECHA <= TO_DATE($P{P_FECHA_HASTA},'YYYY-MM-DD') OR $P{P_FECHA_HASTA} IS NULL) 
+
 ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 	</queryString>
 	<field name="nro_pedido" class="java.lang.Integer">
@@ -86,6 +88,11 @@ ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 	<field name="destino" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="destino"/>
 		<property name="com.jaspersoft.studio.field.label" value="destino"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pedido_movimiento"/>
+	</field>
+	<field name="nro_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nro_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="nro_expediente"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedido_movimiento"/>
 	</field>
 	<field name="ref_doc_asociado" class="java.lang.String">
@@ -173,7 +180,7 @@ ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 	<columnHeader>
 		<band height="31">
 			<staticText>
-				<reportElement x="60" y="11" width="48" height="20" uuid="7b985fbb-e0fb-4701-9130-f504e0965d95"/>
+				<reportElement x="102" y="11" width="48" height="20" uuid="7b985fbb-e0fb-4701-9130-f504e0965d95"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -186,7 +193,7 @@ ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 				<text><![CDATA[FECHA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="108" y="11" width="75" height="20" uuid="58152cd8-c641-439a-bf37-48494352b254"/>
+				<reportElement x="60" y="11" width="42" height="20" uuid="58152cd8-c641-439a-bf37-48494352b254"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -196,10 +203,10 @@ ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SOLICITANTE]]></text>
+				<text><![CDATA[N° EXP.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="11" width="206" height="20" uuid="3229a025-cbd4-4afe-af61-b014ffa312a9"/>
+				<reportElement x="221" y="11" width="220" height="20" uuid="3229a025-cbd4-4afe-af61-b014ffa312a9"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -212,7 +219,7 @@ ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="460" y="11" width="206" height="20" uuid="6969c0d4-95bd-4616-9d17-34bb12f8735c"/>
+				<reportElement x="441" y="11" width="225" height="20" uuid="6969c0d4-95bd-4616-9d17-34bb12f8735c"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -292,7 +299,7 @@ PEDIDO ANTERIOR]]></text>
 DOCUMENTO ASOCIADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="183" y="11" width="71" height="20" uuid="31fbfe8f-bda4-44e8-94bb-6344c6dd07a8"/>
+				<reportElement x="150" y="11" width="71" height="20" uuid="31fbfe8f-bda4-44e8-94bb-6344c6dd07a8"/>
 				<box padding="0">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -311,7 +318,7 @@ SOLICITANTE]]></text>
 		<band height="13" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="60" y="0" width="48" height="13" uuid="083eda30-1003-4f8e-a150-89e74c02dded">
+				<reportElement stretchType="ContainerHeight" x="102" y="0" width="48" height="13" uuid="083eda30-1003-4f8e-a150-89e74c02dded">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="1">
@@ -326,7 +333,7 @@ SOLICITANTE]]></text>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="108" y="0" width="75" height="13" uuid="f0c579e0-e834-4ce9-8204-df5dc60b93fa">
+				<reportElement stretchType="ContainerHeight" x="60" y="0" width="42" height="13" uuid="f0c579e0-e834-4ce9-8204-df5dc60b93fa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2">
@@ -338,10 +345,10 @@ SOLICITANTE]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{solicitante}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nro_expediente}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="254" y="0" width="206" height="13" uuid="6aea157a-8e1f-4010-8773-5887e433f05d">
+				<reportElement stretchType="ContainerHeight" x="221" y="0" width="220" height="13" uuid="6aea157a-8e1f-4010-8773-5887e433f05d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2">
@@ -356,7 +363,7 @@ SOLICITANTE]]></text>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="460" y="0" width="206" height="13" uuid="6731df87-d5a1-4cce-9974-ba513d50bb66">
+				<reportElement stretchType="ContainerHeight" x="441" y="0" width="225" height="13" uuid="6731df87-d5a1-4cce-9974-ba513d50bb66">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2">
@@ -427,7 +434,7 @@ SOLICITANTE]]></text>
 				<textFieldExpression><![CDATA[$V{V_REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="667" y="0" width="94" height="13" uuid="4f469ff7-56f3-41bd-a1e9-0d6eb863a10f">
+				<reportElement stretchType="ContainerHeight" x="666" y="0" width="94" height="13" uuid="4f469ff7-56f3-41bd-a1e9-0d6eb863a10f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2">
@@ -442,7 +449,7 @@ SOLICITANTE]]></text>
 				<textFieldExpression><![CDATA[$F{ref_doc_asociado}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="183" y="0" width="71" height="13" uuid="b7bc99f7-bc45-4e7b-9432-a45208c1c0e6">
+				<reportElement stretchType="ContainerHeight" x="150" y="0" width="71" height="13" uuid="b7bc99f7-bc45-4e7b-9432-a45208c1c0e6">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2">
