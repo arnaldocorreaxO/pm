@@ -30,4 +30,7 @@ $(function () {
       });
 
 
+      filtrar_area_solicitante();
+
+
 });

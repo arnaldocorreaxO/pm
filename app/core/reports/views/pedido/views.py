@@ -44,16 +44,18 @@ class RptPedido001ReportView(ModuleMixin, FormView):
 				report.report_name  = 'rpt_pedido001'
 				report.report_url = reverse_lazy(report.report_name)
 				report.report_title = Module.objects.filter(url=report.report_url).first().description                      
-				#PARAMETROS				
+				#PARAMETROS	
+
+				print(situacion)			
 				report.params['P_TITULO2'] = str(self.request.user.sucursal)
 				report.params['P_TITULO3'] = 'PEDIDOS DE MATERIALES'				
 				report.params['P_ANHO'] = ",".join(anho) if anho!=[''] else None
-				report.params['P_SITUACION'] = ",".join(situacion) if situacion!=[''] else None
-				report.params['P_SOLICITANTE']= ",".join(solicitante) if solicitante!=[''] else None
-				report.params['P_AREA_SOLICITANTE'] = ",".join(area_solicitante) if area_solicitante!=[''] else None
+				report.params['P_SITUACION']= "'"+"','".join(situacion)+"'" if situacion!=[''] else None
+				report.params['P_SOLICITANTE_ID']= ",".join(solicitante) if solicitante!=[''] else None
+				report.params['P_AREA_SOLICITANTE_ID'] = ",".join(area_solicitante) if area_solicitante!=[''] else None
 				if habilita_fecha:
 					report.params['P_FECHA_DESDE'] = fecha_desde
-					report.params['P_FECHA_HASTA'] = fecha_hasta
+					report.params['P_FECHA_HASTA'] = fecha_hasta				
 				
 				return report.render_to_response(tipo)
 
