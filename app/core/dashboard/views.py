@@ -353,7 +353,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['sucursales'] = Sucursal.objects.filter(activo=True).count()
         context['dependencias'] = Dependencia.objects.filter(activo=True).count()
         context['pedidos'] = Movimiento.objects.filter(fecha__year=datetime.datetime.today().strftime("%Y")).count()
-        context['movimientos'] = Movimiento.objects.filter().order_by('-id')[0:10]
+        context['movimientos'] = Movimiento.objects.filter().order_by('-fecha','-nro_pedido')[0:10]
         context['usuario'] = User.objects.filter(id=self.request.user.id).first()
         return context
 
