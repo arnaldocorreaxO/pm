@@ -14,7 +14,7 @@ function get_graph_1(args) {
             enabled: true
         },
         title: {
-            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año:' + args[4] + '</span>'
+            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año: ' + args[4] + '</span>'
         },
         subtitle: {
             text: args[0] + '<br> Actualizado: ' + args[1]

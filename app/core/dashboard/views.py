@@ -21,9 +21,10 @@ locale.setlocale(locale.LC_TIME, '')
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
-    
+
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        self.usuario = User.objects.filter(id=self.request.user.id).first()
         return super().dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
@@ -43,10 +44,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             action = request.POST['action']
             anho = int(datetime.datetime.today().strftime('%Y'))
             if action == 'get_graph_1':
-                info = []
-                
+                info = []                
                 qs = Movimiento.objects.values('situacion') \
-                        .filter(fecha__year=anho)\
+                        .filter(sucursal=self.usuario.sucursal,fecha__year=anho)\
                         .exclude(activo=False)\
                         .annotate(total=Count('id')) \
                         .order_by('-total')
@@ -63,7 +63,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             elif action == 'get_graph_2':
                 info = []                
                 qs = Movimiento.objects.values('situacion') \
-                        .filter(fecha__year= anho - 1)\
+                        .filter(sucursal=self.usuario.sucursal,fecha__year= anho - 1)\
                         .exclude(activo=False)\
                         .annotate(total=Count('id')) \
                         .order_by('-total')
@@ -80,7 +80,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             elif action == 'get_graph_3':
                 info = []                
                 qs = Movimiento.objects.values('situacion') \
-                        .filter(fecha__year=anho - 2)\
+                        .filter(sucursal=self.usuario.sucursal,fecha__year=anho - 2)\
                         .exclude(activo=False)\
                         .annotate(total=Count('id')) \
                         .order_by('-total')
@@ -97,7 +97,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             elif action == 'get_graph_4':
                 info = []
                 for i in Movimiento.objects.values('solicitante__denominacion') \
-                                        .filter(fecha__year=anho,activo=True)\
+                                        .filter(sucursal=self.usuario.sucursal,fecha__year=anho,activo=True)\
                                         .annotate(ctd_pedidos=Count(True)) \
                                         .order_by('-ctd_pedidos'):
                                         info.append({'name' : i['solicitante__denominacion'],
@@ -107,7 +107,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             elif action == 'get_graph_5':
                 info = []
                 for i in Movimiento.objects.values('area_solicitante__denominacion') \
-                                        .filter(fecha__year=anho,activo=True)\
+                                        .filter(sucursal=self.usuario.sucursal,fecha__year=anho,activo=True)\
                                         .annotate(ctd_pedidos=Count(True)) \
                                         .order_by('-ctd_pedidos'):
                                         info.append({'name' : i['area_solicitante__denominacion'],
@@ -351,10 +351,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['anho_actual'] = datetime.datetime.today().strftime("%Y")
         context['empresa'] = Empresa.objects.first()
         context['sucursales'] = Sucursal.objects.filter(activo=True).count()
-        context['dependencias'] = Dependencia.objects.filter(activo=True).count()
-        context['pedidos'] = Movimiento.objects.filter(fecha__year=datetime.datetime.today().strftime("%Y")).count()
-        context['movimientos'] = Movimiento.objects.filter().order_by('-fecha','-nro_pedido')[0:10]
-        context['usuario'] = User.objects.filter(id=self.request.user.id).first()
+        context['dependencias'] = Dependencia.objects.filter(sucursal=self.usuario.sucursal,activo=True).count()
+        context['pedidos'] = Movimiento.objects.filter(sucursal=self.usuario.sucursal,fecha__year=datetime.datetime.today().strftime("%Y")).count()
+        context['movimientos'] = Movimiento.objects.filter(sucursal=self.usuario.sucursal).order_by('-fecha','-nro_pedido')[0:10]
+        context['usuario'] = self.usuario
         return context
 
 

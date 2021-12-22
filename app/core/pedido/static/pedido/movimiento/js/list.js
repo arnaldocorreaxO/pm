@@ -35,9 +35,10 @@ function init() {
 function getData(all) {
     if (all=='all'){
         input_term.val("");
+        select_sucursal.val("").change();
         select_anho.val("").change();
         select_situacion.val("").change();
-        select_solicitante.val("").change();
+        select_solicitante.val("").change();        
         select_area_solicitante.val("").change();
     }
 
@@ -46,9 +47,10 @@ function getData(all) {
         'start_date': input_daterange.data('daterangepicker').startDate.format('YYYY-MM-DD'),
         'end_date': input_daterange.data('daterangepicker').endDate.format('YYYY-MM-DD'),
         'term': input_term.val(), 
+        'sucursal': (select_sucursal.val().includes('')?'*':select_sucursal.val().join(", ")),
         'anho':(select_anho.val().includes('')?'*':select_anho.val().join(", ")),
         'situacion': "'"+(select_situacion.val().includes('')?'*':select_situacion.val().join("','"))+"'",
-        'solicitante': (select_solicitante.val().includes('')?'*':select_solicitante.val().join(", ")),
+        'solicitante': (select_solicitante.val().includes('')?'*':select_solicitante.val().join(", ")),        
         'area_solicitante': (select_area_solicitante.val().includes('')?'*':select_area_solicitante.val().join(", "))   
     }; 
 
@@ -190,9 +192,12 @@ function getData(all) {
                 targets: [-1],
                 class: 'text-center',
                 render: function (data, type, row) {
+                    console.log(row);
                     var buttons = '';  
-                    // buttons += '<button type="button" class="btn btn-primary js-detail" data-url="/pedido/movimiento/detail/' + row.id + '/"><i class="fas fa-folder-open"></i></button>';
-                    buttons += '<button type="button" class="btn btn-warning js-update" data-url="/pedido/movimiento/update/' + row.id + '/"><i class="fas fa-edit"></i></button>';
+                    if (row.sucursal == row.usuario_sucursal){                    
+                        // buttons += '<button type="button" class="btn btn-primary js-detail" data-url="/pedido/movimiento/detail/' + row.id + '/"><i class="fas fa-folder-open"></i></button>';
+                        buttons += '<button type="button" class="btn btn-warning js-update" data-url="/pedido/movimiento/update/' + row.id + '/"><i class="fas fa-edit"></i></button>';
+                    }
                     return buttons;
                 }
             },
@@ -215,9 +220,10 @@ $(function () {
 
     input_term = $('input[name="term"]');
     current_date = new moment().format('YYYY-MM-DD');
-    input_daterange = $('input[name="date_range"]');    
+    input_daterange = $('input[name="date_range"]');   
+    select_sucursal = $('select[name="sucursal"]'); 
     select_anho = $('select[name="anho"]');
-    select_situacion = $('select[name="situacion"]');
+    select_situacion = $('select[name="situacion"]');    
     select_solicitante = $('select[name="solicitante"]');
     select_area_solicitante = $('select[name="area_solicitante"]');
 

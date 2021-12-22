@@ -1,6 +1,8 @@
 import math
 import datetime
 from django.db import connection
+from config.utils import print_info
+from core.base.models import Sucursal
 from core.pedido.models import Dependencia
 from core.reports.jasperbase import JasperReportBase
 from core.reports.forms import ReportForm
@@ -16,11 +18,13 @@ from django.views.generic.edit import FormView
 from core.pedido.forms import Movimiento, MovimientoForm, SearchForm
 from core.security.mixins import PermissionMixin
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, resolve_url
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 from django.contrib.auth.decorators import permission_required
+
+from core.user.models import User
 
 class MovimientoDetailView(PermissionMixin, DetailView):
 	model = Movimiento
@@ -31,6 +35,7 @@ class MovimientoDetailView(PermissionMixin, DetailView):
 
 	@method_decorator(csrf_exempt)
 	def dispatch(self, request, *args, **kwargs):
+		self.usuario = request.user
 		return super().dispatch(request, *args, **kwargs)
 
 	# Este usamos para el modal 	
@@ -77,17 +82,16 @@ class MovimientoListView(PermissionMixin, FormView):
 			if type == 'nro_pedido':                
 				if Movimiento.objects.filter(nro_pedido__exact=obj):
 					data['valid'] = False
-			if type == 'no_denominacion':
+			if type == 'NO_denominacion':
 				if Movimiento.objects.filter(denominacion__iexact=obj):
 					data['valid'] = False
 		except:
 			pass
 		return JsonResponse(data)
-	
+
 	def post(self, request, *args, **kwargs):
 		data = {}
-		action = request.POST['action']
-		# print(request.POST)
+		action = request.POST['action']		
 		try:
 			if action == 'validate_data':
 				return self.validate_data()
@@ -100,13 +104,14 @@ class MovimientoListView(PermissionMixin, FormView):
 				if id:
 					_where += f" AND pedido_dependencia.dependencia_padre_id IN ({id})"
 				
-				qs = Dependencia.objects.filter(activo__exact=True)\
+				qs = Dependencia.objects.filter(sucursal=request.user.sucursal,activo__exact=True)\
 										.extra(where=[_where])\
 										.order_by('denominacion')	
 				# print(qs.query)
 				for i in qs:
 					# data.append({'id': i.id, 'text': i.denominacion, 'data': i.barrio.toJSON()})
 					data.append({'id': i.id, 'text': i.denominacion})	
+
 			elif action == 'search':
 				data = []
 				term = request.POST['term']		
@@ -115,11 +120,13 @@ class MovimientoListView(PermissionMixin, FormView):
 				anho = request.POST.getlist('anho') if 'anho' in request.POST else None				
 				situacion = request.POST.getlist('situacion') if 'situacion' in request.POST else None
 				solicitante = request.POST.getlist('solicitante') if 'solicitante' in request.POST else None
+				sucursal = request.POST.getlist('sucursal') if 'sucursal' in request.POST else None
 				area_solicitante = request.POST.getlist('area_solicitante') if 'area_solicitante' in request.POST else None
 
+				sucursal = ",".join(sucursal) if sucursal!=[''] else None
 				anho = ",".join(anho) if anho!=[''] else None
 				situacion = ",".join(situacion) if situacion!=[''] else None
-				solicitante = ",".join(solicitante) if solicitante!=[''] else None
+				solicitante = ",".join(solicitante) if solicitante!=[''] else None				
 				area_solicitante = ",".join(area_solicitante) if area_solicitante!=[''] else None
 
 				_start = request.POST['start']
@@ -165,6 +172,9 @@ class MovimientoListView(PermissionMixin, FormView):
 				if anho:
 					if not '*' in anho:
 						_where += f" AND pedido_movimiento.anho IN ({anho})"
+				if sucursal:
+					if not '*' in sucursal:						
+						_where += f" AND pedido_movimiento.sucursal_id IN ({sucursal})"
 				if situacion:
 					if not '*' in situacion:						
 						_where += f" AND pedido_movimiento.situacion IN ({situacion})"
@@ -207,7 +217,8 @@ class MovimientoListView(PermissionMixin, FormView):
 				position = start + 1
 				for i in qs:
 					item = i.toJSON()
-					item['position'] = position					
+					item['position'] = position
+					item['usuario_sucursal'] = request.user.sucursal.id					
 					data.append(item)
 					position += 1
 				# print(data)
@@ -216,6 +227,7 @@ class MovimientoListView(PermissionMixin, FormView):
 						'per_page': per_page,  # [opcional]
 						'recordsTotal': total,
 						'recordsFiltered': total, }
+			
 			elif action == 'search_detpedido':
 				data = []
 				for det in Movimiento.objects.filter(id=request.POST['id']):
@@ -227,9 +239,13 @@ class MovimientoListView(PermissionMixin, FormView):
 		return HttpResponse(json.dumps(data), content_type='application/json')
 
 	def get_context_data(self, **kwargs):
+		print_info('GET_CONTEXT_DATA')
+		# print(self.request.user)		
 		context = super().get_context_data(**kwargs)
+		form = SearchForm(user=self.request.user)
+		context['form'] = form
 		context['create_url'] = reverse_lazy('movimiento_create')
-		context['title'] = 'Listado de Movimientos'
+		context['title'] = 'Listado de Movimientos'	
 		return context
 
 class MovimientoCreateView(PermissionMixin, CreateView):

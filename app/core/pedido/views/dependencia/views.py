@@ -6,10 +6,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from core.base.models import Sucursal
 
 from core.pedido.models import Dependencia
 from core.pedido.forms import DependenciaForm
 from config.utils import print_info
+from core.user.models import User
 
 class DependenciaListView(PermissionRequiredMixin, ListView):
     model = Dependencia
@@ -18,28 +20,17 @@ class DependenciaListView(PermissionRequiredMixin, ListView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-    
-    # def post(self, request, *args, **kwargs):
-    #     data = {}
-    #     print(request.POST)
-    #     action = request.POST['action']
-    #     id_reloj = request.POST['id_reloj']
-    #     try:
-    #         if action == 'load_data':
-    #             reloj = Reloj.objects.get(id=id_reloj)
-    #             data = reloj.testConexion()
-    #             print_info(str(reloj))
-    #         else:
-    #             data['error'] = 'No ha ingresado una opción'
-    #     except Exception as e:
-    #         data['error'] = str(e)
-    #     return HttpResponse(json.dumps(data), content_type='application/json')
+        # Funciona así tambien para modificar un atributo de la clase
+        # self.usuario = User.objects.filter(id=self.request.user.id).first()
+        self.usuario = request.user
+        return super().dispatch(request, *args, **kwargs)    
+   
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['create_url'] = reverse_lazy('dependencia_create')
         context['title'] = 'Listado de Dependencias '
+        context['object_list'] = Dependencia.objects.filter(sucursal=self.usuario.sucursal)
         return context
 
 
@@ -52,6 +43,7 @@ class DependenciaCreateView(PermissionRequiredMixin, CreateView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        self.usuario = User.objects.filter(id=self.request.user.id).first()
         return super().dispatch(request, *args, **kwargs)
 
     def validate_data(self):
@@ -60,10 +52,10 @@ class DependenciaCreateView(PermissionRequiredMixin, CreateView):
             type = self.request.POST['type']
             obj = self.request.POST['obj'].strip()            
             if type == 'denominacion':                
-                if Dependencia.objects.filter(denominacion__iexact=obj):
+                if Dependencia.objects.filter(sucursal=self.usuario.sucursal,denominacion__iexact=obj):
                     data['valid'] = False
             elif type == 'denom_corta':                
-                if Dependencia.objects.filter(denominacion__iexact=obj):
+                if Dependencia.objects.filter(sucursal=self.usuario.sucursal,denominacion__iexact=obj):
                     data['valid'] = False
         except:
             pass
@@ -86,7 +78,7 @@ class DependenciaCreateView(PermissionRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
-        context['title'] = 'Nuevo registro Dependencias '
+        context['title'] = 'Nuevo registro de Dependencias '
         context['action'] = 'add'
         return context
 
@@ -110,7 +102,7 @@ class DependenciaUpdateView(PermissionRequiredMixin, UpdateView):
             obj = self.request.POST['obj'].strip()
             id = self.get_object().id
             if type == 'denominacion':
-                if Dependencia.objects.filter(denominacion__iexact=obj).exclude(id=id):
+                if Dependencia.objects.filter(sucursal=self.usuario.sucursal,denominacion__iexact=obj).exclude(id=id):
                     data['valid'] = False
         except:
             pass

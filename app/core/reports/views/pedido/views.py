@@ -69,6 +69,8 @@ class RptPedido001ReportView(ModuleMixin, FormView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		form = SearchForm(user=self.request.user)
+		context['form'] = form
 		context['title'] = 'Reporte de Pedidos de Materiales'
 		context['action'] = 'report'
 		return context

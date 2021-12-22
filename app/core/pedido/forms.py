@@ -1,4 +1,6 @@
 
+from django.conf import UserSettingsHolder
+from django.contrib.auth.models import User
 from core.base.forms import *
 from django import forms
 # from django.forms import *
@@ -126,7 +128,17 @@ class ModelChoiceFieldAnho(forms.ModelChoiceField):
 ===    FORM DE BUSQUEDA   ===
 ============================= '''
 
-class SearchForm(forms.Form):
+class SearchForm(forms.Form):    
+    solicitante = None
+    def __init__(self,*args, **kwargs):
+        usuario = kwargs.pop('user', None)
+        print_info('FORM')
+        print(usuario)
+        super(SearchForm, self).__init__(*args, **kwargs)
+        if usuario:
+            self.fields['solicitante'].queryset= Dependencia.objects.filter(sucursal=usuario.sucursal,dependencia_padre__isnull=True, activo__exact=True).order_by('denominacion')                  
+          
+
     # Extra Fields
     # Rango de fechas
     date_range = forms.CharField(widget=forms.TextInput(attrs={
@@ -139,13 +151,13 @@ class SearchForm(forms.Form):
     habilita_fecha = forms.BooleanField(initial=False,required=False)
 
     choiceSituacion = Movimiento().SITUACION_PEDIDO
-    choiceSituacion = choiceSituacion + (('','Todos'),)
+    choiceSituacion = choiceSituacion + (('','(Todos)'),)
 
     anho = ModelChoiceFieldAnho(queryset=Movimiento.objects.filter(activo__exact=True).order_by(
         '-anho').distinct('anho'), to_field_name='anho', empty_label="(Todos)")
     situacion = forms.ChoiceField(choices=choiceSituacion)
-    solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
-        dependencia_padre__isnull=True, activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
+    sucursal = forms.ModelChoiceField(queryset=Sucursal.objects.filter(activo__exact=True).order_by('denominacion'), empty_label="(Todos)")  
+    solicitante = forms.ModelChoiceField(queryset=None, empty_label="(Todos)")    
     area_solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
         dependencia_padre__isnull=False, activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
     # producto = forms.ModelChoiceField(queryset=Producto.objects.filter(activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
@@ -155,7 +167,7 @@ class SearchForm(forms.Form):
     term.widget.attrs.update({'class': 'form-control'})
     anho.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     situacion.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
+    sucursal.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     solicitante.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     area_solicitante.widget.attrs.update({'class': 'form-control select2','multiple':'true'})
     habilita_fecha.widget.attrs.update({'class': 'form-control'})
-    

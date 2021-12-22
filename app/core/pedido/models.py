@@ -10,7 +10,7 @@ class Dependencia(ModeloBase):
 	sucursal = models.ForeignKey(Sucursal,on_delete=models.PROTECT)
 	dependencia_padre = models.ForeignKey('self',null=True,blank=True,on_delete=models.PROTECT)
 	denominacion = models.CharField(max_length=100)
-	denom_corta = models.CharField(verbose_name='Denom. Corta',max_length=25,unique=True,blank=True,null=True)
+	denom_corta = models.CharField(verbose_name='Denom. Corta',max_length=25,blank=True,null=True)
 		
 	def toJSON(self):
 		item = model_to_dict(self)
@@ -27,6 +27,7 @@ class Dependencia(ModeloBase):
 		# db_table = 'as_marcacion'
 		verbose_name = 'Dependencia'
 		verbose_name_plural = 'Dependencias'
+		unique_together = ('denom_corta','sucursal')
 
 '''DEPENDENCIAS'''
 class Destino(ModeloBase):	
