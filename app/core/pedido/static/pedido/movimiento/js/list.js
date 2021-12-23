@@ -242,7 +242,7 @@ $(function () {
     $('.drp-buttons').hide();
 
     init();
-    getData('all'); 
+    // getData('all'); 
 
     $('.btnFilter').on('click', function () {
         getData('filter');
@@ -333,6 +333,10 @@ $(function () {
         };
     });
 
+    // #SUCURSAL POR DEFECTO 
+    var sucursal_id = $('input[name="sucursal_id"]').val();   
+    select_sucursal.val(sucursal_id).change();
+    // getData('all');
   
   });
 

@@ -242,8 +242,10 @@ class MovimientoListView(PermissionMixin, FormView):
 		print_info('GET_CONTEXT_DATA')
 		# print(self.request.user)		
 		context = super().get_context_data(**kwargs)
-		form = SearchForm(user=self.request.user)
+		usuario = self.request.user
+		form = SearchForm(user=usuario)
 		context['form'] = form
+		context['sucursal'] = usuario.sucursal.id
 		context['create_url'] = reverse_lazy('movimiento_create')
 		context['title'] = 'Listado de Movimientos'	
 		return context
@@ -295,7 +297,8 @@ class MovimientoCreateView(PermissionMixin, CreateView):
 			if request.user.has_perm('pedido.add_movimiento'):			
 				# pk = kwargs['pk']
 				# elector = get_object_or_404(Movimiento, pk=pk)
-				form = self.get_form()
+				# form = self.get_form()
+				form = MovimientoForm(user=self.request.user)
 				self.template_name = 'pedido/movimiento/create_modal.html'
 				# context =self.get_context_data(**kwargs)
 				context={}				
@@ -379,7 +382,7 @@ class MovimientoUpdateView(PermissionMixin, UpdateView):
 			if request.user.has_perm('pedido.change_movimiento'):			
 				pk = kwargs['pk']
 				elector = get_object_or_404(Movimiento, pk=pk)
-				form = MovimientoForm(instance=elector)
+				form = MovimientoForm(instance=elector,user=self.request.user)
 				self.template_name = 'pedido/movimiento/create_modal.html'
 				context = self.get_context_data(**kwargs)
 				context['form'] = form				
