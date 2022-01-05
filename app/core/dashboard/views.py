@@ -42,7 +42,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            anho = int(datetime.datetime.today().strftime('%Y'))
+            anho = int(datetime.datetime.today().strftime('%Y')) - 1
             if action == 'get_graph_1':
                 info = []                
                 qs = Movimiento.objects.values('situacion') \
