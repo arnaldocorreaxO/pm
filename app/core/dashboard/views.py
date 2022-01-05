@@ -348,7 +348,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['fecha_actual'] = datetime.datetime.today().strftime("%d/%m/%Y")
         context['fecha_hora_actual'] = datetime.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
         context['mes_actual'] = datetime.datetime.today().strftime("%B").capitalize()
-        context['anho_actual'] = datetime.datetime.today().strftime("%Y")
+        context['anho_actual'] = int(datetime.datetime.today().strftime("%Y")) - 1
         context['empresa'] = Empresa.objects.first()
         context['sucursales'] = Sucursal.objects.filter(activo=True).count()
         context['dependencias'] = Dependencia.objects.filter(sucursal=self.usuario.sucursal,activo=True).count()
