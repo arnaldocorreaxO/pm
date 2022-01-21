@@ -4,6 +4,7 @@ from django.db.models.aggregates import Count
 
 from django.db.models.fields import FloatField
 from django.db.models.query_utils import Q
+from core.dashboard.forms import DashboardForm
 
 from core.pedido.models import Dependencia, Movimiento
 from core.base.models import Empresa, Sucursal
@@ -42,7 +43,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            anho = int(datetime.datetime.today().strftime('%Y')) - 1
+            anho = int(request.POST['anho'])
+            # anho = int(datetime.datetime.today().strftime('%Y'))
             if action == 'get_graph_1':
                 info = []                
                 qs = Movimiento.objects.values('situacion') \
@@ -348,13 +350,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['fecha_actual'] = datetime.datetime.today().strftime("%d/%m/%Y")
         context['fecha_hora_actual'] = datetime.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
         context['mes_actual'] = datetime.datetime.today().strftime("%B").capitalize()
-        context['anho_actual'] = str(int(datetime.datetime.today().strftime("%Y")) - 1)
+        # context['anho_actual'] = str(int(datetime.datetime.today().strftime("%Y")) - 1)
+        context['anho_actual'] = datetime.datetime.today().strftime("%Y")
         context['empresa'] = Empresa.objects.first()
         context['sucursales'] = Sucursal.objects.filter(activo=True).count()
         context['dependencias'] = Dependencia.objects.filter(sucursal=self.usuario.sucursal,activo=True).count()
         context['pedidos'] = Movimiento.objects.filter(sucursal=self.usuario.sucursal,fecha__year=datetime.datetime.today().strftime("%Y")).count()
         context['movimientos'] = Movimiento.objects.filter(sucursal=self.usuario.sucursal).order_by('-fecha','-nro_pedido')[0:10]
         context['usuario'] = self.usuario
+        context['form'] = DashboardForm()
         return context
 
 

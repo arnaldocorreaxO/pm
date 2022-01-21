@@ -1,6 +1,6 @@
 
 function get_graph_1(args) {
-
+    anho = args[4]
     var graph_1 = Highcharts.chart('graph_1', {
         chart: {
             type: 'pie',
@@ -14,7 +14,7 @@ function get_graph_1(args) {
             enabled: true
         },
         title: {
-            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año: ' + args[4] + '</span>'
+            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año: ' + anho + '</span>'
         },
         subtitle: {
             text: args[0] + '<br> Actualizado: ' + args[1]
@@ -44,7 +44,9 @@ function get_graph_1(args) {
         url: window.location.pathname,
         type: 'POST',
         data: {
-            'action': 'get_graph_1'
+            'anho': anho,
+            'action': 'get_graph_1',
+
         },
         dataType: 'json',
     }).done(function (request) {

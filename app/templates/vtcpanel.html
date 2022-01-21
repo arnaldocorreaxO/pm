@@ -21,6 +21,7 @@
         }
     </style>
 
+    <script src="{% static '/js/dashboard.js' %}"></script>
     <script src="{% static '/js/graphics/gph_pedido001.js' %}"></script>
     <script src="{% static '/js/graphics/gph_pedido002.js' %}"></script>
     <script src="{% static '/js/graphics/gph_pedido003.js' %}"></script>
@@ -112,6 +113,24 @@
     {% else %}
     
         <div class="container-fluid">
+            <!-- INPUT NO VISIBLES -->
+            <input type="hidden" name="usu_denom_corta" id="action" value="{{usuario.sucursal.denominacion_corta}}">
+            <input type="hidden" name="fecha_hora_actual" id="action" value="{{ fecha_hora_actual }}">
+            <input type="hidden" name="fecha_actual" id="action" value="{{ fecha_actual }}">
+            <input type="hidden" name="mes_actual" id="action" value="{{ mes_actual }}">
+            <input type="hidden" name="anho_actual" id="action" value="{{ anho_actual }}">            
+
+                <div class="row">
+                    <div class="col-12 justify-content-end d-flex">
+                        <div class="form-group">
+                            <!-- <label>Año:</label> -->
+                            <div class="input-group mb-3">
+                            <b class="p-1">Año Seleccionado: </b> {{ form.anho }}
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{% url 'sucursal_list' %}" class="small-box-footer">
@@ -263,28 +282,7 @@
             </div>
             
 
-            <script> 
-
-                function init() {
-                    args=[]
-                    args.push("{{usuario.sucursal.denominacion_corta}}");
-                    args.push("{{fecha_hora_actual}}");                    
-                    args.push("{{fecha_actual}}");                    
-                    args.push("{{mes_actual}}");
-                    args.push("{{anho_actual}}");
-                    
-                    get_graph_1(args);
-                    get_graph_2(args);
-                    get_graph_3(args);
-                    get_graph_4(args);
-                    get_graph_5(args);
-                };
-
-                $(function () {
-                    init();
-                });
-
-            </script>
+            
         </div>
     {% endif %}
 {% endblock %}

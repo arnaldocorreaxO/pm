@@ -1,9 +1,11 @@
 function get_graph_5(args) {
+    var anho = args[4]
     $.ajax({
         url: window.location.pathname,
         type: 'POST',
         data: {
-            'action': 'get_graph_5'
+            'anho': anho,
+            'action': 'get_graph_5',
         },
         dataType: 'json',
     }).done(function (request) {
@@ -13,7 +15,7 @@ function get_graph_5(args) {
                     type: 'column'
                 },
                 title: {
-                    text: '</i><span style="font-size:20px; font-weight: bold;">Pedidos por Area Solicitante Año: ' + args[4] + '</span>'
+                    text: '</i><span style="font-size:20px; font-weight: bold;">Pedidos por Area Solicitante Año: ' + anho + '</span>'
                 },
                 subtitle: {
                     text: args[0] + '<br> Actualizado: '+ args[1]

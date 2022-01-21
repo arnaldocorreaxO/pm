@@ -45,6 +45,7 @@ function get_graph_3(args) {
         url: window.location.pathname,
         type: 'POST',
         data: {
+            'anho': anho,
             'action': 'get_graph_3'
         },
         dataType: 'json',

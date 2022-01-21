@@ -1,30 +1,23 @@
-import math
 import datetime
-from django.db import connection
-from config.utils import print_info
-from core.base.models import Sucursal
-from core.pedido.models import Dependencia
-from core.reports.jasperbase import JasperReportBase
-from core.reports.forms import ReportForm
 import json
+import math
 
-from django.http import JsonResponse, HttpResponse
+from config.utils import print_info
+from core.pedido.forms import Movimiento, MovimientoForm, SearchForm
+from core.pedido.models import Dependencia
+from core.security.mixins import PermissionMixin
+from django.contrib.auth.decorators import permission_required
+from django.db import connection
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, render, resolve_url
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 from django.views.generic.edit import FormView
 
-from core.pedido.forms import Movimiento, MovimientoForm, SearchForm
-from core.security.mixins import PermissionMixin
-
-from django.shortcuts import render, get_object_or_404, resolve_url
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-
-from django.contrib.auth.decorators import permission_required
-
-from core.user.models import User
 
 class MovimientoDetailView(PermissionMixin, DetailView):
 	model = Movimiento
@@ -157,8 +150,7 @@ class MovimientoListView(PermissionMixin, FormView):
 							_order[i] = f"-{_order[i]}"
 				# print('Order:', _order)
 				if len(term):
-					_search = term
-				
+					_search = term				
 
 				_where = "'' = %s"
 				# _where = "nro_pedido = 1000"

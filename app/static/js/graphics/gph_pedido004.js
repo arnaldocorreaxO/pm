@@ -1,8 +1,10 @@
 function get_graph_4(args) {
+    anho = args[4]
     $.ajax({
         url: window.location.pathname,
         type: 'POST',
         data: {
+            'anho': anho,
             'action': 'get_graph_4'
         },
         dataType: 'json',
@@ -13,7 +15,7 @@ function get_graph_4(args) {
                     type: 'column'
                 },
                 title: {
-                    text: '</i><span style="font-size:20px; font-weight: bold;">Pedidos por Solicitante Año: ' + args[4] + '</span>'
+                    text: '</i><span style="font-size:20px; font-weight: bold;">Pedidos por Solicitante Año: ' + anho + '</span>'
                 },
                 subtitle: {
                     text: args[0] + '<br> Actualizado: '+ args[1]
