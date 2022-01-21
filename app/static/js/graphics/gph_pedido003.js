@@ -1,7 +1,8 @@
 
 function get_graph_3(args) {
+    
+    var anho=args[4]
 
-    var anho=parseInt(args[4])-2
     var graph_1 = Highcharts.chart('graph_3', {
         chart: {
             type: 'pie',
@@ -15,7 +16,7 @@ function get_graph_3(args) {
             enabled: true
         },
         title: {
-            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año: ' + anho + '</span>'
+            text: '</i><span style="font-size:20px; font-weight: bold;">Situación Pedidos Año: ' + parseInt(anho - 2)+ '</span>'
         },
         subtitle: {
             text: args[0] + '<br> Actualizado: ' + args[1]
