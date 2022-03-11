@@ -12,18 +12,14 @@ $(function() {
     validar_formulario();
 
     function valores_por_defecto() {
-        // SUCURSAL POR DEFECTO
-    
+        // SUCURSAL POR DEFECTO    
         var action = $('#frmModalMovimiento input[name="action"]').val();
         var sucursal_id = $('#frmModalMovimiento input[name="sucursal_id"]').val();
-        var fecha_actual = $('#frmModalMovimiento input[name="fecha_actual"]').val();
-    
+        var fecha_actual = $('#frmModalMovimiento input[name="fecha_actual"]').val();    
         if (action == 'add') {
             var sucursal = $('#frmModalMovimiento select[name="sucursal"]');
             sucursal.val(sucursal_id).change();
-        };
-    
-    
+        };        
         // FECHA DATETIMEPICKER
         var fecha = $('#frmModalMovimiento input[name="fecha"]');
         (fecha.val() == '' ? fecha.val(fecha_actual) : 0)

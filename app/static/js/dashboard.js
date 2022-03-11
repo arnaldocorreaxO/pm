@@ -36,16 +36,16 @@ $(function () {
 
     /*ESTABLECER EL ANHO ACTUAL EN EL DASHBOARD */
     // anho_actual = $('input[name="anho_actual"]').val(); 
-    anho = $('select[name="anho"]');    
+    select_anho = $('select[name="anho"]');    
 
     /*AL CAMBIAR EL AÑO*/
-    anho.on('change', function () {        
+    select_anho.on('change', function () {        
         load();
     });
 
     /*Ambos metodos funciona */
     // anho.val(anho_actual).trigger("change"); //Cambia valor y dispara el evento
-    anho.val(anho.val()).change(); //Cambia valor y dispara el evento 
+    select_anho.val(select_anho.val()).change(); //Cambia valor y dispara el evento 
 
 
 });
