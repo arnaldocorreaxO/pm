@@ -1,23 +1,17 @@
 import locale
-import datetime
 from django.db.models.aggregates import Count
-
-from django.db.models.fields import FloatField
-from django.db.models.query_utils import Q
 from core.dashboard.forms import DashboardForm
-
 from core.pedido.models import Dependencia, Movimiento
 from core.base.models import Empresa, Sucursal
 from core.security.models import Dashboard
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.views.generic import TemplateView
 from core.user.models import User
-from django.db.models.functions import Coalesce
+
 locale.setlocale(locale.LC_TIME, '')
 
 
