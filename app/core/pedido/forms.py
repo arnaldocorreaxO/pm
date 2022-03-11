@@ -144,7 +144,8 @@ class ModelChoiceFieldAnho(forms.ModelChoiceField):
 
 class SearchForm(forms.Form):
     solicitante = None
-
+    area_solicitante = None
+    
     def __init__(self, *args, **kwargs):
         self.usuario = kwargs.pop('user', None)
         print_info('FORM')
@@ -152,7 +153,10 @@ class SearchForm(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         if self.usuario:
             self.fields['solicitante'].queryset = Dependencia.objects.filter(
-                sucursal=self.usuario.sucursal, dependencia_padre__isnull=True, activo__exact=True).order_by('denominacion')
+            sucursal=self.usuario.sucursal, dependencia_padre__isnull=True, activo__exact=True).order_by('denominacion')
+
+            self.fields['area_solicitante'].queryset = Dependencia.objects.filter(
+            sucursal=self.usuario.sucursal, dependencia_padre__isnull=False, activo__exact=True).order_by('denominacion')
 
     # Extra Fields
     # Rango de fechas
@@ -173,8 +177,8 @@ class SearchForm(forms.Form):
     sucursal = forms.ModelChoiceField(queryset=Sucursal.objects.filter(
         activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
     solicitante = forms.ModelChoiceField(queryset=None, empty_label="(Todos)")
-    area_solicitante = forms.ModelChoiceField(queryset=Dependencia.objects.filter(
-        dependencia_padre__isnull=False, activo__exact=True).order_by('denominacion'), empty_label="(Todos)")
+    area_solicitante = forms.ModelChoiceField(queryset=None, empty_label="(Todos)")
+    
 
     term.widget.attrs.update({'class': 'form-control'})
     anho.widget.attrs.update(
