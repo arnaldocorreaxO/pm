@@ -165,7 +165,7 @@ ORDER BY MOV.FECHA, MOV.NRO_PEDIDO]]>
 				<textFieldExpression><![CDATA["Impresión\n"
 + $P{P_REPORTE} 
 +"\nFecha: " + DATEFORMAT($V{V_HOY},"dd/MM/yyyy") 
-+"\nHora: " + DATEFORMAT($V{V_HOY},"hh:mm:ss")
++"\nHora: " + DATEFORMAT($V{V_HOY},"HH:mm:ss")
 +"\nUsuario: " + $P{P_USUARIO}]]></textFieldExpression>
 			</textField>
 			<textField>
