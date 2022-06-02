@@ -35,9 +35,10 @@ class RptPedido001ReportView(ModuleMixin, FormView):
 				if habilita_fecha:
 					fecha_desde = date_range[:11].strip()
 					fecha_hasta = date_range[13:].strip()					
+				sucursal = request.POST.getlist('sucursal') if 'sucursal' in request.POST else None
 				anho = request.POST.getlist('anho') if 'anho' in request.POST else None			
 				situacion = request.POST.getlist('situacion') if 'situacion' in request.POST else None	
-				solicitante = request.POST.getlist('solicitante') if 'solicitante' in request.POST else None
+				solicitante = request.POST.getlist('solicitante') if 'solicitante' in request.POST else None				
 				area_solicitante = request.POST.getlist('area_solicitante') if 'area_solicitante' in request.POST else None		
 				#CONFIG				 
 				report = JasperReportBase()  
@@ -49,9 +50,10 @@ class RptPedido001ReportView(ModuleMixin, FormView):
 				print(situacion)			
 				report.params['P_TITULO2'] = str(self.request.user.sucursal)
 				report.params['P_TITULO3'] = 'PEDIDOS DE MATERIALES'				
+				report.params['P_SUCURSAL_ID']= ",".join(sucursal) if sucursal!=[''] else None
 				report.params['P_ANHO'] = ",".join(anho) if anho!=[''] else None
 				report.params['P_SITUACION']= "'"+"','".join(situacion)+"'" if situacion!=[''] else None
-				report.params['P_SOLICITANTE_ID']= ",".join(solicitante) if solicitante!=[''] else None
+				report.params['P_SOLICITANTE_ID']= ",".join(solicitante) if solicitante!=[''] else None				
 				report.params['P_AREA_SOLICITANTE_ID'] = ",".join(area_solicitante) if area_solicitante!=[''] else None
 				if habilita_fecha:
 					report.params['P_FECHA_DESDE'] = fecha_desde
